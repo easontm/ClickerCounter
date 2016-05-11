@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Clicker</string>
+    <string name="no_clickers_yet">You don\'t have any Clickers yet!</string>
+    <string name="add_clicker">Add a Clicker!</string>
+</resources>
