@@ -29,7 +29,7 @@ public class Clicker {
         mTitle = titleIn;
     }
 
-    public UUID gemId() {
+    public UUID getId() {
         return mId;
     }
 

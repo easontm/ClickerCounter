@@ -2,6 +2,7 @@ package com.easontm.tyler.clicker;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class ClickerListFragment extends Fragment {
 
 
     private RecyclerView mClickerRecyclerView;
+    private ClickerAdapter mAdapter;
     private Button mAddButton;
     private TextView mNoClickers;
 
@@ -39,15 +43,24 @@ public class ClickerListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         //Fetch Clicker list from DB
-
+        ClickerBox clickerBox = ClickerBox.get(getActivity());
 
         //Assign views
         View view = inflater.inflate(R.layout.fragment_clicker_list, container, false);
+        mClickerRecyclerView = (RecyclerView) view.findViewById(R.id.clicker_recycler_view);
+        mClickerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Set "first item" view visibility logic
+        mAddButton = (Button) view.findViewById(R.id.first_clicker_button);
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeClicker();
+            }
+        });
+        mNoClickers = (TextView) view.findViewById(R.id.no_clickers_text);
 
-
-        //updateUI?
+        updateUI();
 
         return view;
 
@@ -64,22 +77,48 @@ public class ClickerListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_list, menu);
+
+        //MenuItem subtitleItem = menu.findItem(R.id.menu_item_new_clicker);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.menu_item_new_clicker:
+                makeClicker();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
+    private void updateUI() {
+        ClickerBox clickerBox = ClickerBox.get(getActivity());
+        List<Clicker> clickers = clickerBox.getClickers();
+
+        if(clickers.size() == 0) {
+            mClickerRecyclerView.setVisibility(View.GONE);
+            mAddButton.setVisibility(View.VISIBLE);
+            mNoClickers.setVisibility(View.VISIBLE);
+        } else {
+            mClickerRecyclerView.setVisibility(View.VISIBLE);
+            mAddButton.setVisibility(View.GONE);
+            mNoClickers.setVisibility(View.GONE);
         }
 
-        //remove this shit later
-        return true;
+        if(mAdapter == null) {
+            mAdapter = new ClickerAdapter(clickers);
+            mClickerRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setClickers(clickers);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private void makeClicker() {
         Clicker clicker = new Clicker();
         //Store in DB
-
+        ClickerBox.get(getActivity()).addClicker(clicker);
         //Create intent
 
         //Start activity for result
@@ -140,6 +179,10 @@ public class ClickerListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mClickers.size();
+        }
+
+        public void setClickers(List<Clicker> clickers) {
+            mClickers = clickers;
         }
     }
 
