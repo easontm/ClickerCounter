@@ -18,6 +18,10 @@ public class Clicker {
         mGoal = 0;
     }
 
+    public Clicker(UUID id) {
+        mId = id;
+    }
+
     public Clicker(int countIn, int goalIn, String titleIn) {
         mId = UUID.randomUUID();
         mCount = countIn;
@@ -25,35 +29,35 @@ public class Clicker {
         mTitle = titleIn;
     }
 
-    public UUID getmId() {
+    public UUID gemId() {
         return mId;
     }
 
-    public void setmId(UUID mId) {
+    public void setId(UUID mId) {
         this.mId = mId;
     }
 
-    public String getmTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
-    public void setmTitle(String mTitle) {
+    public void setTitle(String mTitle) {
         this.mTitle = mTitle;
     }
 
-    public int getmCount() {
+    public int getCount() {
         return mCount;
     }
 
-    public void setmCount(int mCount) {
+    public void setCount(int mCount) {
         this.mCount = mCount;
     }
 
-    public int getmGoal() {
+    public int getGoal() {
         return mGoal;
     }
 
-    public void setmGoal(int mGoal) {
+    public void setGoal(int mGoal) {
         this.mGoal = mGoal;
     }
 }

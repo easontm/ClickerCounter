@@ -10,4 +10,9 @@ public class ClickerListActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return new ClickerListFragment();
     }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_masterdetail;
+    }
 }
