@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/text_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Count: 5"
+        android:textSize="40sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="14dp"/>
+
+    <TextView
+        android:id="@+id/text_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Goal: 25"
+        android:layout_below="@id/text_count"
+        android:textSize="36sp"
+        android:layout_marginLeft="16dp"
+        />
+
+    <Button
+        android:id="@+id/button_increment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UP"
+        android:layout_centerInParent="true"/>
+
+    <Button
+        android:id="@+id/button_decrement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOWN"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/button_increment"/>
+
+</RelativeLayout>

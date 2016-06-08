@@ -2,6 +2,7 @@ package com.easontm.tyler.clicker;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +31,12 @@ public class ClickerListFragment extends Fragment {
     private ClickerAdapter mAdapter;
     private Button mAddButton;
     private TextView mNoClickers;
+    private Callbacks mCallbacks;
 
+
+    public interface Callbacks {
+        void onClickerSelected(Clicker clicker);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,11 +145,20 @@ public class ClickerListFragment extends Fragment {
             itemView.setOnClickListener(this);
 
             //Assign all the pretties
+            mCount = (TextView) itemView.findViewById(R.id.list_item_count);
+            mGoal = (TextView) itemView.findViewById(R.id.list_item_goal);
+            mTitle = (TextView) itemView.findViewById(R.id.list_item_title_text);
+            mGoalReached = (ImageView) itemView.findViewById(R.id.list_item_achieve_image);
         }
 
         public void bindClicker(Clicker clicker) {
             mClicker = clicker;
             //set textview values from getters
+            mCount.setText(clicker.getCount());
+            mGoal.setText(clicker.getGoal());
+            mTitle.setText(clicker.getTitle());
+            mGoalReached.setImageDrawable(ResourcesCompat
+                    .getDrawable(getResources(), R.drawable.ic_achieve_icon, null ));
         }
 
         @Override
