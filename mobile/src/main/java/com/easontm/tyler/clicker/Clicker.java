@@ -60,4 +60,12 @@ public class Clicker {
     public void setGoal(int mGoal) {
         this.mGoal = mGoal;
     }
+
+    public void incCount() {
+        mCount++;
+    }
+
+    public void decCount() {
+        mCount--;
+    }
 }

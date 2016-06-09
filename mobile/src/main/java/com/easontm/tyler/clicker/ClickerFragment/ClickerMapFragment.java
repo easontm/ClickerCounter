@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 
 import com.easontm.tyler.clicker.R;
 
+import java.util.UUID;
+
 /**
  * Created by drink on 6/8/2016.
  */
-public class ClickerPageFragment extends ClickerAbstractPageFragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
+public class ClickerMapFragment extends ClickerAbstractPageFragment {
+    //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
 
-    private int mPage;
+    private UUID mClickerId;
 
-    public static ClickerPageFragment newInstance(int page) {
+    public static ClickerMapFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        ClickerPageFragment fragment = new ClickerPageFragment();
+        args.putSerializable(ARG_CLICKER_ID, clickerId);
+        ClickerMapFragment fragment = new ClickerMapFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -26,15 +28,14 @@ public class ClickerPageFragment extends ClickerAbstractPageFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
+        mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
+        View view = inflater.inflate(R.layout.fragment_clicker_map, container, false);
 
         return view;
     }
-
 }

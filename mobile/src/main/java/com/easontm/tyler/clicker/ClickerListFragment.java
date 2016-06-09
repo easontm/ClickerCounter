@@ -1,5 +1,7 @@
 package com.easontm.tyler.clicker;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -42,6 +44,23 @@ public class ClickerListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Activity a;
+
+        if(context instanceof Activity) {
+            a = (Activity) context;
+            mCallbacks = (Callbacks) a;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
     }
 
     @Override
@@ -98,7 +117,7 @@ public class ClickerListFragment extends Fragment {
         }
     }
 
-    private void updateUI() {
+    public void updateUI() {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         List<Clicker> clickers = clickerBox.getClickers();
 
@@ -126,7 +145,7 @@ public class ClickerListFragment extends Fragment {
         //Store in DB
         ClickerBox.get(getActivity()).addClicker(clicker);
         //Create intent
-
+        mCallbacks.onClickerSelected(clicker);
         //Start activity for result
     }
 
@@ -154,18 +173,21 @@ public class ClickerListFragment extends Fragment {
         public void bindClicker(Clicker clicker) {
             mClicker = clicker;
             //set textview values from getters
+
+            /*
             mCount.setText(clicker.getCount());
             mGoal.setText(clicker.getGoal());
             mTitle.setText(clicker.getTitle());
             mGoalReached.setImageDrawable(ResourcesCompat
                     .getDrawable(getResources(), R.drawable.ic_achieve_icon, null ));
+                    */
         }
 
         @Override
         public void onClick(View v) {
             //Create intent for opening Clicker
-
             //startActivityForResult(intent, RESULT_CODE_CLICKER_NO);
+            mCallbacks.onClickerSelected(mClicker);
         }
 
     }

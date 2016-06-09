@@ -2,10 +2,11 @@ package com.easontm.tyler.clicker;
 
 import android.support.v4.app.Fragment;
 
+import com.easontm.tyler.clicker.ClickerFragment.ClickerAbstractPageFragment;
 import com.easontm.tyler.clicker.ClickerFragment.ClickerPageParentFragment;
 
 public class ClickerListActivity extends SingleFragmentActivity
-        implements ClickerListFragment.Callbacks{
+        implements ClickerListFragment.Callbacks, ClickerAbstractPageFragment.Callbacks {
 
     @Override
     protected Fragment createFragment() {
@@ -29,6 +30,17 @@ public class ClickerListActivity extends SingleFragmentActivity
         } else {
             // get fragment which holds viewpager, add to detail_fragment_container
 
+        }
+    }
+
+    public void onClickerUpdated(Clicker clicker) {
+        if (findViewById(R.id.detail_fragment_container) == null) {
+
+        } else {
+            ClickerListFragment listFragment = (ClickerListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+            listFragment.updateUI();
         }
     }
 }
