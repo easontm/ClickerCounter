@@ -13,13 +13,17 @@ import java.util.UUID;
 /**
  * Created by drink on 6/8/2016.
  */
-public abstract class ClickerAbstractPageFragment extends Fragment {
+//public abstract class ClickerAbstractPageFragment extends Fragment {
+public abstract class ClickerAbstractPageFragment extends ClickerPageParentFragment {
     public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
 
+    /*
     private UUID mClickerId;
     private Clicker mClicker;
     private Callbacks mCallbacks;
+    */
 
+    //Required for hosting
     public interface Callbacks {
         void onClickerUpdated(Clicker clicker);
     }
@@ -40,6 +44,7 @@ public abstract class ClickerAbstractPageFragment extends Fragment {
         mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
     }
 
+    /*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -51,14 +56,17 @@ public abstract class ClickerAbstractPageFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
     }
+    */
 
     @Override
     public void onPause() {
+        super.onPause();
         //ClickerBox.get(getActivity()).updateClicker(mClicker);        maybe, we'll see?
         updateClicker();
     }
@@ -67,8 +75,10 @@ public abstract class ClickerAbstractPageFragment extends Fragment {
         return mClicker;
     }
 
+    /*
     protected void updateClicker() {
         ClickerBox.get(getActivity()).updateClicker(mClicker);
         mCallbacks.onClickerUpdated(mClicker);
     }
+    */
 }

@@ -4,4 +4,9 @@
     <string name="add_clicker">Add a Clicker!</string>
     <string name="new_clicker">New Clicker</string>
     <string name="title_hint">Name your Clicker</string>
+    <string name="count_text">Count:  %1$s</string>
+    <string name="goal_text">Goal: %1$s</string>
+    <string name="subtitle_format">%1$s Clickers</string>
+    <string name="menu_set_goal">Set Goal</string>
+
 </resources>

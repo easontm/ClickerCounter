@@ -6,7 +6,7 @@ import com.easontm.tyler.clicker.ClickerFragment.ClickerAbstractPageFragment;
 import com.easontm.tyler.clicker.ClickerFragment.ClickerPageParentFragment;
 
 public class ClickerListActivity extends SingleFragmentActivity
-        implements ClickerListFragment.Callbacks, ClickerAbstractPageFragment.Callbacks {
+        implements ClickerListFragment.Callbacks, ClickerAbstractPageFragment.Callbacks, ClickerPageParentFragment.Callbacks {
 
     @Override
     protected Fragment createFragment() {
@@ -26,6 +26,7 @@ public class ClickerListActivity extends SingleFragmentActivity
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, newDetail)
+                    .addToBackStack(null)
                     .commit();
         } else {
             // get fragment which holds viewpager, add to detail_fragment_container

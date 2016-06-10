@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +45,12 @@ public class ClickerListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //updateUI();
     }
 
     @Override
@@ -136,8 +143,19 @@ public class ClickerListFragment extends Fragment {
             mClickerRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setClickers(clickers);
+            mClickerRecyclerView.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }
+        updateSubtitle();
+    }
+
+    private void updateSubtitle() {
+        ClickerBox clickerBox = ClickerBox.get(getActivity());
+        int clickerCount = clickerBox.getClickers().size();
+        String subtitle = getString(R.string.subtitle_format, clickerCount);
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     private void makeClicker() {
@@ -174,13 +192,13 @@ public class ClickerListFragment extends Fragment {
             mClicker = clicker;
             //set textview values from getters
 
-            /*
-            mCount.setText(clicker.getCount());
-            mGoal.setText(clicker.getGoal());
+
+            mCount.setText(getString(R.string.count_text, clicker.getCount()));
+            mGoal.setText(getString(R.string.goal_text, clicker.getGoal()));
             mTitle.setText(clicker.getTitle());
             mGoalReached.setImageDrawable(ResourcesCompat
                     .getDrawable(getResources(), R.drawable.ic_achieve_icon, null ));
-                    */
+
         }
 
         @Override

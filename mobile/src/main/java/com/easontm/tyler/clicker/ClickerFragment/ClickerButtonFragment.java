@@ -24,8 +24,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private TextView mGoal;
     private Button mIncButton;
     private int mCountValue;
-    private static final String COUNT_TEXT = "Count: ";
-    private static final String GOAL_TEXT = "Goal: ";
 
 
     /*
@@ -74,10 +72,11 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         });
 
         mCountView = (TextView) view.findViewById(R.id.text_count);
-        mCountView.setText(COUNT_TEXT + getClicker().getCount());
+        mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
 
         mGoal = (TextView) view.findViewById(R.id.text_goal);
-        mGoal.setText(GOAL_TEXT + getClicker().getGoal());
+        //mGoal.setText(getString(R.string.goal_text) + getClicker().getGoal());
+        mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
 
         mIncButton = (Button) view.findViewById(R.id.button_increment);
         mIncButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +84,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             public void onClick(View v) {
                 getClicker().incCount();
                 updateClicker();
-                mCountView.setText(COUNT_TEXT + getClicker().getCount());
+                //mCountView.setText(COUNT_TEXT + getClicker().getCount());
+                mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
             }
         });
 
