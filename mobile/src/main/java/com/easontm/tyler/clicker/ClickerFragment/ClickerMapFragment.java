@@ -25,11 +25,13 @@ public class ClickerMapFragment extends ClickerAbstractPageFragment {
         return fragment;
     }
 
+    /*
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
     }
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

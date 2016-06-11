@@ -40,8 +40,8 @@ public class NumberPickerFragment extends DialogFragment {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_goal, null);
         mNumberPicker = (NumberPicker) v.findViewById(R.id.dialog_goal_number_picker);
         mNumberPicker.setValue(mGoal);
-        mNumberPicker.setMaxValue(Integer.MAX_VALUE);
-        mNumberPicker.setMinValue(Integer.MIN_VALUE);
+        mNumberPicker.setMaxValue(100);
+        //mNumberPicker.setMinValue(Integer.MIN_VALUE);
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)

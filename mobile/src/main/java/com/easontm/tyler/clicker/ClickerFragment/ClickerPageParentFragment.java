@@ -25,20 +25,25 @@ import java.util.UUID;
 /**
  * Created by drink on 6/8/2016.
  */
-public class ClickerPageParentFragment extends Fragment {
+public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     private static final String ARG_CLICKER_ID = "clicker_id";
+    /* Moved to ClickerButtonFragment
     private static final String DIALOG_GOAL = "goal";
     private static final int REQUEST_GOAL = 1;
+    */
 
     //If abstract isn't a child, change to private
+    /*
     protected UUID mClickerId;
     protected Clicker mClicker;
     protected Callbacks mCallbacks;
 
+
     public interface Callbacks {
         void onClickerUpdated(Clicker clicker);
     }
+    */
 
     public static ClickerPageParentFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
@@ -50,6 +55,7 @@ public class ClickerPageParentFragment extends Fragment {
 
     }
 
+    /*
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -66,13 +72,14 @@ public class ClickerPageParentFragment extends Fragment {
         super.onDetach();
         mCallbacks = null;
     }
+    */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
         mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -90,6 +97,7 @@ public class ClickerPageParentFragment extends Fragment {
         return view;
     }
 
+    /*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -126,9 +134,12 @@ public class ClickerPageParentFragment extends Fragment {
             updateClicker();
         }
     }
+    */
 
+    /*
     protected void updateClicker() {
         ClickerBox.get(getActivity()).updateClicker(mClicker);
         mCallbacks.onClickerUpdated(mClicker);
     }
+    */
 }

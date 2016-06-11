@@ -1,15 +1,22 @@
 package com.easontm.tyler.clicker.ClickerFragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
 
 /**
@@ -17,6 +24,8 @@ import com.easontm.tyler.clicker.R;
  */
 public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
+    private static final String DIALOG_GOAL = "goal";
+    private static final int REQUEST_GOAL = 1;
 
     //private UUID mClickerId;
     private EditText mTitle;
@@ -36,20 +45,21 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     }
     */
 
-    /*
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
+        //mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
+        setHasOptionsMenu(true);
     }
-    */
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
 
-        mCountValue = super.getClicker().getCount();
+        mCountValue = getClicker().getCount();
 
         mTitle = (EditText) view.findViewById(R.id.text_title);
         mTitle.setText(super.getClicker().getTitle());
@@ -75,7 +85,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
 
         mGoal = (TextView) view.findViewById(R.id.text_goal);
-        //mGoal.setText(getString(R.string.goal_text) + getClicker().getGoal());
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
 
         mIncButton = (Button) view.findViewById(R.id.button_increment);
@@ -84,13 +93,55 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             public void onClick(View v) {
                 getClicker().incCount();
                 updateClicker();
-                //mCountView.setText(COUNT_TEXT + getClicker().getCount());
-                mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
+                updateButtonFragment();
             }
         });
 
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_clicker, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_item_set_goal:
+                //Create number dialog
+                FragmentManager manager = getChildFragmentManager();
+                NumberPickerFragment dialog = NumberPickerFragment
+                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
+                dialog.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
+                dialog.show(manager, DIALOG_GOAL);
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if(requestCode == REQUEST_GOAL) {
+            int mGoal = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
+            mClicker.setGoal(mGoal);
+            updateClicker();
+            updateButtonFragment();
+        }
+    }
+
+    private void updateButtonFragment() {
+        mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
+        mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
     }
 
 }

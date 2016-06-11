@@ -14,7 +14,7 @@ import java.util.UUID;
  * Created by drink on 6/8/2016.
  */
 //public abstract class ClickerAbstractPageFragment extends Fragment {
-public abstract class ClickerAbstractPageFragment extends ClickerPageParentFragment {
+public abstract class ClickerAbstractPageFragment extends ClickerAbstractFragment {
     public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
 
     /*
@@ -64,16 +64,20 @@ public abstract class ClickerAbstractPageFragment extends ClickerPageParentFragm
     }
     */
 
+    /*
     @Override
     public void onPause() {
         super.onPause();
         //ClickerBox.get(getActivity()).updateClicker(mClicker);        maybe, we'll see?
         updateClicker();
     }
+    */
 
+    /*
     protected Clicker getClicker() {
         return mClicker;
     }
+    */
 
     /*
     protected void updateClicker() {
