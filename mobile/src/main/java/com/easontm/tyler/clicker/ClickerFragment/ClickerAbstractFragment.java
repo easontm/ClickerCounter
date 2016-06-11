@@ -1,7 +1,8 @@
-package com.easontm.tyler.clicker.ClickerFragment;
+package com.easontm.tyler.clicker.clickerfragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.easontm.tyler.clicker.Clicker;
@@ -46,4 +47,5 @@ public abstract class ClickerAbstractFragment extends Fragment {
     protected Clicker getClicker() {
         return mClicker;
     }
+
 }

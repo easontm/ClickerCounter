@@ -1,22 +1,14 @@
-package com.easontm.tyler.clicker.ClickerFragment;
+package com.easontm.tyler.clicker.clickerfragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.NumberPicker;
 
-import com.easontm.tyler.clicker.Clicker;
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
 
@@ -65,7 +57,9 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
             a = (Activity) context;
             mCallbacks = (Callbacks) a;
         }
+
     }
+
 
     @Override
     public void onDetach() {
@@ -74,6 +68,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     }
     */
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +76,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
         //setHasOptionsMenu(true);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
