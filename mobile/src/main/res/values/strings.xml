@@ -8,5 +8,6 @@
     <string name="goal_text">Goal: %1$s</string>
     <string name="subtitle_format">%1$s Clickers</string>
     <string name="menu_set_goal">Set Goal</string>
+    <string name="delete_clicker">Delete Clicker</string>
 
 </resources>

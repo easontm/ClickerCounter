@@ -104,7 +104,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_clicker, menu);
+        inflater.inflate(R.menu.fragment_clicker_button, menu);
     }
 
     @Override

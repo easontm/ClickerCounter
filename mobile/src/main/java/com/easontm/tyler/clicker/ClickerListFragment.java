@@ -50,7 +50,7 @@ public class ClickerListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //updateUI();
+        updateUI();
     }
 
     @Override

@@ -42,18 +42,17 @@ public class ClickerListActivity extends SingleFragmentActivity
     public void onClickerSelected(Clicker clicker) {
         if (findViewById(R.id.detail_fragment_container) == null) {
 
+            /*
             Fragment newDetail = ClickerPageParentFragment.newInstance(clicker.getId());
 
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, newDetail)
                     .addToBackStack(null)
                     .commit();
-
-
-            /*
+            */
             Intent intent = SingleClickerActivity.newIntent(this, clicker.getId());
             startActivity(intent);
-            */
+
         } else {
             // get fragment which holds viewpager, add to detail_fragment_container
             Fragment newDetail = ClickerPageParentFragment.newInstance(clicker.getId());
@@ -61,6 +60,7 @@ public class ClickerListActivity extends SingleFragmentActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detail_fragment_container, newDetail)
                     .commit();
+
         }
     }
 

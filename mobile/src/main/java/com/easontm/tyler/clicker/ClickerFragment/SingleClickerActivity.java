@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.easontm.tyler.clicker.Clicker;
+import com.easontm.tyler.clicker.ClickerListFragment;
 import com.easontm.tyler.clicker.R;
 import com.easontm.tyler.clicker.SingleFragmentActivity;
 
@@ -19,17 +20,20 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
 
     private static final String EXTRA_CLICKER_ID = "com.easontm.tyler.clicker.clicker_id";
 
+    @Override
     protected Fragment createFragment() {
-        return new ClickerPageParentFragment();
-    }
-
-    protected Fragment createFragment(UUID clickerId) {
+        UUID clickerId = (UUID) getIntent().getSerializableExtra(EXTRA_CLICKER_ID);
         return ClickerPageParentFragment.newInstance(clickerId);
     }
 
     @Override
     public void onClickerUpdated(Clicker clicker) {
+        /*
+        ClickerListFragment listFragment = (ClickerListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
+        listFragment.updateUI();
+*/
     }
 
     public static Intent newIntent(Context packageContext, UUID clickerId) {
@@ -38,20 +42,23 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
         return intent;
     }
 
+    /*
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
 
-        UUID clickerId = (UUID) getIntent().getSerializableExtra(EXTRA_CLICKER_ID);
+
+
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
-            fragment = createFragment(clickerId);
+            fragment = createFragment();
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
-    }
+
+    }*/
 }

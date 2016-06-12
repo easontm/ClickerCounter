@@ -1,11 +1,13 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     private static final String ARG_CLICKER_ID = "clicker_id";
+
     /* Moved to ClickerButtonFragment
     private static final String DIALOG_GOAL = "goal";
     private static final int REQUEST_GOAL = 1;
@@ -47,6 +50,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     }
 
+
     /*
     @Override
     public void onAttach(Context context) {
@@ -72,9 +76,10 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
-        mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
-        //setHasOptionsMenu(true);
+            mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
+            mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
+
+        setHasOptionsMenu(true);
     }
 
 
@@ -93,31 +98,35 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         return view;
     }
 
-    /*
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_clicker, menu);
+        inflater.inflate(R.menu.fragment_clicker_parent, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_item_set_goal:
-                //Create number dialog
-                FragmentManager manager = getChildFragmentManager();
-                NumberPickerFragment dialog = NumberPickerFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
-                dialog.setTargetFragment(ClickerPageParentFragment.this, REQUEST_GOAL);
-                dialog.show(manager, DIALOG_GOAL);
+            case R.id.menu_item_delete_clicker:
+                ClickerBox.get(getActivity()).deleteClicker(mClicker);
+                mCallbacks.onClickerUpdated(mClicker);
 
-
+                if(getActivity().findViewById(R.id.detail_fragment_container) == null) {
+                    getActivity().finish();
+                } else {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .remove(getActivity().getSupportFragmentManager()
+                                    .findFragmentById(R.id.detail_fragment_container))
+                            .commit();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
