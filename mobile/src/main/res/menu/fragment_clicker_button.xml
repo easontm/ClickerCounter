@@ -8,5 +8,14 @@
         android:title="@string/menu_set_goal"
         app:showAsAction="ifRoom|withText"
         />
-    >
+
+    <item
+        android:id="@+id/menu_item_set_count"
+        android:title="@string/menu_set_count"
+        app:showAsAction="ifRoom|withText"/>
+
+    <item
+        android:id="@+id/menu_item_change_button_type"
+        android:title="@string/menu_change_type"
+        app:showAsAction="never" />
 </menu>

@@ -20,9 +20,12 @@ public class NumberPickerFragment extends DialogFragment {
 
     public static final String EXTRA_GOAL = "com.easontm.tyler.clicker.goal";
     private static final String ARG_GOAL = "goal";
+    private static final int PICKER_MIN = -10000;
+    private static final int PICKER_MAX = 10000;
 
     private NumberPicker mNumberPicker;
     private int mGoal;
+    private int mOutGoal;
 
     public static NumberPickerFragment newInstance(int goal) {
         Bundle args = new Bundle();
@@ -36,12 +39,19 @@ public class NumberPickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mGoal = getArguments().getInt(ARG_GOAL);
+        mOutGoal = mGoal;
 
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_goal, null);
         mNumberPicker = (NumberPicker) v.findViewById(R.id.dialog_goal_number_picker);
-        mNumberPicker.setValue(mGoal);
-        mNumberPicker.setMaxValue(100);
-        //mNumberPicker.setMinValue(Integer.MIN_VALUE);
+        mNumberPicker.setMaxValue(PICKER_MAX - PICKER_MIN);
+        mNumberPicker.setMinValue(0);
+        mNumberPicker.setValue(mGoal - PICKER_MIN);
+        mNumberPicker.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int index) {
+                return Integer.toString(index + PICKER_MIN);
+            }
+        });
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
@@ -50,8 +60,9 @@ public class NumberPickerFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                int outGoal = mNumberPicker.getValue();
-                                sendResult(Activity.RESULT_OK, outGoal);
+                                mNumberPicker.clearFocus();
+                                int mOutGoal = mNumberPicker.getValue();// + PICKER_MIN;
+                                sendResult(Activity.RESULT_OK, mOutGoal);
                             }
                         })
                 .create();

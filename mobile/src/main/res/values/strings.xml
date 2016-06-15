@@ -9,5 +9,7 @@
     <string name="subtitle_format">%1$s Clickers</string>
     <string name="menu_set_goal">Set Goal</string>
     <string name="delete_clicker">Delete Clicker</string>
+    <string name="menu_set_count">Set Count</string>
+    <string name="menu_change_type">Change Clicker Type</string>
 
 </resources>

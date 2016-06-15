@@ -26,11 +26,13 @@ public class ClickerCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(ClickerTable.Cols.TITLE));
         String count = getString(getColumnIndex(ClickerTable.Cols.COUNT));
         String goal = getString(getColumnIndex(ClickerTable.Cols.GOAL));
+        String type = getString(getColumnIndex(ClickerTable.Cols.TYPE));
 
         Clicker clicker = new Clicker(UUID.fromString(uuidString));
         clicker.setTitle(title);
         clicker.setCount(Integer.parseInt(count));
         clicker.setGoal(Integer.parseInt(goal));
+        clicker.setType(Integer.parseInt(type));
 
         return clicker;
     }

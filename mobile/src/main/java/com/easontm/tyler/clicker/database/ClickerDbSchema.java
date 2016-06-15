@@ -13,7 +13,7 @@ public class ClickerDbSchema {
             public static final String TITLE = "title";
             public static final String COUNT = "count";
             public static final String GOAL = "goal";
-
+            public static final String TYPE = "type";
         }
     }
 

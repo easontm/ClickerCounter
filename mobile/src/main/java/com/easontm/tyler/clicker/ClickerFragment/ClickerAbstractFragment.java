@@ -18,6 +18,10 @@ public abstract class ClickerAbstractFragment extends Fragment {
     protected Clicker mClicker;
     protected Callbacks mCallbacks;
 
+    protected static final int TYPE_INC = 0;
+    protected static final int TYPE_DEC = 1;
+    protected static final int TYPE_INCDEC = 2;
+
     public interface Callbacks {
         void onClickerUpdated(Clicker clicker);
     }

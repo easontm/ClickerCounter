@@ -5,6 +5,9 @@
                 android:layout_height="match_parent"
     >
 
+    <include layout="@layout/view_title_count_goal" />
+
+    <!--
     <TextView
         android:id="@+id/text_count"
         android:layout_width="match_parent"
@@ -23,6 +26,8 @@
         android:textSize="36sp"
         android:layout_marginLeft="16dp"
         />
+
+    -->
 
     <Button
         android:id="@+id/button_increment"

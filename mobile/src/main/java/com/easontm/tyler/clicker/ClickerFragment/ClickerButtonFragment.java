@@ -25,14 +25,18 @@ import com.easontm.tyler.clicker.R;
 public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
     private static final String DIALOG_GOAL = "goal";
+    private static final String DIALOG_COUNT = "count";
+    private static final String DIALOG_TYPE = "type";
     private static final int REQUEST_GOAL = 1;
+    private static final int REQUEST_COUNT = 2;
+    private static final int REQUEST_TYPE = 3;
 
     //private UUID mClickerId;
     private EditText mTitle;
     private TextView mCountView;
     private TextView mGoal;
-    private Button mIncButton;
-    private int mCountValue;
+    private Button m1Button;
+    private Button m2Button;
 
 
     /*
@@ -57,9 +61,70 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        int mType = getClicker().getType();
+
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
 
-        mCountValue = getClicker().getCount();
+        switch (mType) {
+            case (TYPE_INC):
+                view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
+
+                m1Button = (Button) view.findViewById(R.id.button_increment);
+                m1Button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getClicker().incCount();
+                        updateClicker();
+                        updateButtonFragment();
+                    }
+                });
+
+                break;
+            case (TYPE_DEC): // *** FIX ME
+                view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
+
+                m1Button = (Button) view.findViewById(R.id.button_increment);
+                m1Button.setText("DOWN");
+                m1Button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getClicker().decCount();
+                        updateClicker();
+                        updateButtonFragment();
+                    }
+                });
+
+                break;
+            case (TYPE_INCDEC):
+                view = inflater.inflate(R.layout.fragment_clicker_2button, container, false);
+
+                m1Button = (Button) view.findViewById(R.id.button_increment);
+                m1Button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getClicker().incCount();
+                        updateClicker();
+                        updateButtonFragment();
+                    }
+                });
+
+                m2Button = (Button) view.findViewById(R.id.button_decrement);
+                m2Button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getClicker().decCount();
+                        updateClicker();
+                        updateButtonFragment();
+                    }
+                });
+
+                break;
+            default:
+                view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
+        }
+
+
 
         mTitle = (EditText) view.findViewById(R.id.text_title);
         mTitle.setText(super.getClicker().getTitle());
@@ -87,8 +152,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         mGoal = (TextView) view.findViewById(R.id.text_goal);
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
 
-        mIncButton = (Button) view.findViewById(R.id.button_increment);
-        mIncButton.setOnClickListener(new View.OnClickListener() {
+        /*
+        m1Button = (Button) view.findViewById(R.id.button_increment);
+        m1Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getClicker().incCount();
@@ -96,6 +162,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 updateButtonFragment();
             }
         });
+        */
 
 
         return view;
@@ -105,6 +172,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_button, menu);
+
+
     }
 
     @Override
@@ -112,14 +181,26 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         switch(item.getItemId()) {
             case R.id.menu_item_set_goal:
                 //Create number dialog
-                FragmentManager manager = getChildFragmentManager();
-                NumberPickerFragment dialog = NumberPickerFragment
+                FragmentManager managerGoal = getChildFragmentManager();
+                NumberPickerFragment dialogGoal = NumberPickerFragment
                         .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
-                dialog.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
-                dialog.show(manager, DIALOG_GOAL);
-
-
+                dialogGoal.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
+                dialogGoal.show(managerGoal, DIALOG_GOAL);
                 return true;
+            case R.id.menu_item_set_count:
+                FragmentManager managerCount = getChildFragmentManager();
+                NumberPickerFragment dialogCount = NumberPickerFragment
+                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
+                dialogCount.setTargetFragment(ClickerButtonFragment.this, REQUEST_COUNT);
+                dialogCount.show(managerCount, DIALOG_COUNT);
+                return true;
+            case R.id.menu_item_change_button_type:
+                FragmentManager managerType = getChildFragmentManager();
+                RadioButtonFragment dialogType = RadioButtonFragment
+                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getType());
+                dialogType.setTargetFragment(ClickerButtonFragment.this, REQUEST_TYPE);
+                dialogType.show(managerType, DIALOG_TYPE);
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -136,6 +217,23 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             mClicker.setGoal(mGoal);
             updateClicker();
             updateButtonFragment();
+        } else if (requestCode == REQUEST_COUNT) {
+            int mCount = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
+            mClicker.setCount(mCount);
+            updateClicker();
+            updateButtonFragment();
+        } else if (requestCode == REQUEST_TYPE) {
+            int mType = data.getIntExtra(RadioButtonFragment.EXTRA_CLICKER_TYPE, 0);
+            if(mClicker.getType() != mType) {
+                mClicker.setType(mType);
+                updateClicker();
+                updateButtonFragment();
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(this)
+                        .attach(this)
+                        .commit();
+            }
         }
     }
 

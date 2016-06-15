@@ -24,7 +24,8 @@ public class ClickerBaseHelper extends SQLiteOpenHelper{
             ClickerTable.Cols.UUID + ", " +
             ClickerTable.Cols.TITLE + ", " +
             ClickerTable.Cols.COUNT + ", " +
-            ClickerTable.Cols.GOAL + ")"
+            ClickerTable.Cols.GOAL + ", " +
+            ClickerTable.Cols.TYPE + ")"
         );
 
         db.execSQL("create table " + ClickTable.NAME + "(" +

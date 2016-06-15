@@ -11,15 +11,18 @@ public class Clicker {
     private String mTitle;
     private int mCount;
     private int mGoal;
+    private int mType;
 
     public Clicker() {
         mId = UUID.randomUUID();
         mCount = 0;
         mGoal = 0;
+        mType = 0;
     }
 
     public Clicker(UUID id) {
         mId = id;
+        mType = 0;
     }
 
     public Clicker(int countIn, int goalIn, String titleIn) {
@@ -67,5 +70,14 @@ public class Clicker {
 
     public void decCount() {
         mCount--;
+    }
+
+    /* Type 0: ++ | Type 1: -- | Type 2: +- */
+    public int getType() {
+        return mType;
+    }
+
+    public void setType(int type) {
+        this.mType = type;
     }
 }

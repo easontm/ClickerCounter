@@ -100,6 +100,7 @@ public class ClickerBox {
         values.put(ClickerTable.Cols.TITLE, clicker.getTitle());
         values.put(ClickerTable.Cols.COUNT, clicker.getCount());
         values.put(ClickerTable.Cols.GOAL, clicker.getGoal());
+        values.put(ClickerTable.Cols.TYPE, clicker.getType());
 
         return values;
     }
