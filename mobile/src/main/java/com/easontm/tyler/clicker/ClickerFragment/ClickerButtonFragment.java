@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
@@ -27,9 +28,11 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private static final String DIALOG_GOAL = "goal";
     private static final String DIALOG_COUNT = "count";
     private static final String DIALOG_TYPE = "type";
+    private static final String DIALOG_BATCH = "batch";
     private static final int REQUEST_GOAL = 1;
     private static final int REQUEST_COUNT = 2;
     private static final int REQUEST_TYPE = 3;
+    private static final int REQUEST_BATCH = 4;
 
     //private UUID mClickerId;
     private EditText mTitle;
@@ -152,19 +155,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         mGoal = (TextView) view.findViewById(R.id.text_goal);
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
 
-        /*
-        m1Button = (Button) view.findViewById(R.id.button_increment);
-        m1Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getClicker().incCount();
-                updateClicker();
-                updateButtonFragment();
-            }
-        });
-        */
-
-
         return view;
     }
 
@@ -172,8 +162,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_button, menu);
-
-
     }
 
     @Override
@@ -183,17 +171,24 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 //Create number dialog
                 FragmentManager managerGoal = getChildFragmentManager();
                 NumberPickerFragment dialogGoal = NumberPickerFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
+                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
+                        , NumberPickerFragment.PICKER_GOAL);
                 dialogGoal.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
                 dialogGoal.show(managerGoal, DIALOG_GOAL);
                 return true;
             case R.id.menu_item_set_count:
                 FragmentManager managerCount = getChildFragmentManager();
                 NumberPickerFragment dialogCount = NumberPickerFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal());
+                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
+                        , NumberPickerFragment.PICKER_COUNT);
                 dialogCount.setTargetFragment(ClickerButtonFragment.this, REQUEST_COUNT);
                 dialogCount.show(managerCount, DIALOG_COUNT);
                 return true;
+            case R.id.menu_item_batch_click:
+                FragmentManager managerBatch = getChildFragmentManager();
+                NumberPadFragment dialogBatch = NumberPadFragment.newInstance();
+                dialogBatch.setTargetFragment(ClickerButtonFragment.this, REQUEST_BATCH);
+                dialogBatch.show(managerBatch, DIALOG_BATCH);
             case R.id.menu_item_change_button_type:
                 FragmentManager managerType = getChildFragmentManager();
                 RadioButtonFragment dialogType = RadioButtonFragment
@@ -234,12 +229,17 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                         .attach(this)
                         .commit();
             }
+        } else if (requestCode == REQUEST_BATCH) {
+            int batchValue = data.getIntExtra(NumberPadFragment.EXTRA_BATCH_VALUE, 0);
         }
     }
 
     private void updateButtonFragment() {
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
         mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
+        if (getClicker().getGoal() == getClicker().getCount()) {
+            Toast.makeText(getActivity(), R.string.toast_goal, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

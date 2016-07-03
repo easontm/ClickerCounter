@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_hint"
+        android:textSize="38sp"
+        />
+
+    <TextView
+        android:id="@+id/text_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Count: -1"
+        android:textSize="34sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_below="@id/text_title"/>
+
+    <TextView
+        android:id="@+id/text_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Goal: -1"
+        android:layout_below="@id/text_count"
+        android:textSize="28sp"
+        android:layout_marginLeft="16dp"
+        />
+
+</LinearLayout>

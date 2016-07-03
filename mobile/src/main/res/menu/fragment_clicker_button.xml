@@ -6,16 +6,29 @@
     <item
         android:id="@+id/menu_item_set_goal"
         android:title="@string/menu_set_goal"
-        app:showAsAction="ifRoom|withText"
+        app:showAsAction="never"
+        android:orderInCategory="1"
         />
 
     <item
         android:id="@+id/menu_item_set_count"
         android:title="@string/menu_set_count"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="never"
+        android:orderInCategory="2"
+        />
 
     <item
         android:id="@+id/menu_item_change_button_type"
         android:title="@string/menu_change_type"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:orderInCategory="4"
+        />
+
+    <item
+        android:id="@+id/menu_item_batch_click"
+        android:title="Batch Click"
+        app:showAsAction="ifRoom|withText"
+        android:orderInCategory="3"
+        />
+
 </menu>

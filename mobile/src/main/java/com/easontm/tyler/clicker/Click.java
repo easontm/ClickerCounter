@@ -12,6 +12,7 @@ public class Click {
     //private Date timestamp;
     private String timestamp;
     private String location;
+    private int value;
 
     public Click() {
         this(UUID.randomUUID());
@@ -57,5 +58,13 @@ public class Click {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 }

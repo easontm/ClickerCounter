@@ -11,5 +11,8 @@
     <string name="delete_clicker">Delete Clicker</string>
     <string name="menu_set_count">Set Count</string>
     <string name="menu_change_type">Change Clicker Type</string>
+    <string name="toast_goal">Goal Achieved!</string>
+    <string name="batch_click">Batch Click</string>
+    <string name="batch_out_of_bounds">Try and keep it within +/-10k.</string>
 
 </resources>
