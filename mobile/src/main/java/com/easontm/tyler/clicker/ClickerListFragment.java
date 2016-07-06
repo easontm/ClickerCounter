@@ -152,7 +152,7 @@ public class ClickerListFragment extends Fragment {
     private void updateSubtitle() {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         int clickerCount = clickerBox.getClickers().size();
-        String subtitle = getString(R.string.subtitle_format, clickerCount);
+        String subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, clickerCount, clickerCount);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setSubtitle(subtitle);
@@ -193,7 +193,8 @@ public class ClickerListFragment extends Fragment {
             //set textview values from getters
 
 
-            mCount.setText(getString(R.string.count_text, clicker.getCount()));
+            mCount.setText(getString(R.string.count_text,
+                    ClickBox.get(getActivity()).getClickCount(clicker)));
             mGoal.setText(getString(R.string.goal_text, clicker.getGoal()));
             mTitle.setText(clicker.getTitle());
             mGoalReached.setImageDrawable(ResourcesCompat

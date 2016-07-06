@@ -43,12 +43,18 @@ public class NumberPadFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        int batchValue =  Integer.parseInt(mBatchEditText.getText().toString());
-                        if (batchValue > 10000 || batchValue < -10000) {
-                            Toast.makeText(getActivity(), getString(R.string.batch_out_of_bounds), Toast.LENGTH_SHORT).show();
+                        String inputString = mBatchEditText.getText().toString();
+                        if (!inputString.equals("")) {
+                            int batchValue =  Integer.parseInt(inputString);
+                            if (batchValue > 10000 || batchValue < -10000) {
+                                Toast.makeText(getActivity(), getString(R.string.batch_out_of_bounds), Toast.LENGTH_SHORT).show();
+                            } else {
+                                sendResult(Activity.RESULT_OK, batchValue);
+                            }
                         } else {
-                            sendResult(Activity.RESULT_OK, batchValue);
+                            sendResult(Activity.RESULT_OK, 0);
                         }
+
                     }
                 })
                 .create();

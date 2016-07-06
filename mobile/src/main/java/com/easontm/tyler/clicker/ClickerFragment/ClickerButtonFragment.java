@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easontm.tyler.clicker.Click;
+import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
 
@@ -68,6 +70,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         int mType = getClicker().getType();
 
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
+        final ClickBox mClickBox = ClickBox.get(getActivity());
 
         switch (mType) {
             case (TYPE_INC):
@@ -78,6 +81,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                     @Override
                     public void onClick(View v) {
                         getClicker().incCount();
+                        //new click bits
+                        click(1);
+
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -93,6 +99,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                     @Override
                     public void onClick(View v) {
                         getClicker().decCount();
+                        //new click bits
+                        click(-1);
+
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -107,6 +116,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                     @Override
                     public void onClick(View v) {
                         getClicker().incCount();
+                        //new click bits
+                        click(1);
+
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -117,6 +129,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                     @Override
                     public void onClick(View v) {
                         getClicker().decCount();
+                        //new click bits
+                        click(-1);
+
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -150,7 +165,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         });
 
         mCountView = (TextView) view.findViewById(R.id.text_count);
-        mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
+        mCountView.setText(getString(R.string.count_text,
+                ClickBox.get(getActivity()).getClickCount(getClicker())));
 
         mGoal = (TextView) view.findViewById(R.id.text_goal);
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
@@ -189,13 +205,14 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 NumberPadFragment dialogBatch = NumberPadFragment.newInstance();
                 dialogBatch.setTargetFragment(ClickerButtonFragment.this, REQUEST_BATCH);
                 dialogBatch.show(managerBatch, DIALOG_BATCH);
+                return true;
             case R.id.menu_item_change_button_type:
                 FragmentManager managerType = getChildFragmentManager();
                 RadioButtonFragment dialogType = RadioButtonFragment
                         .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getType());
                 dialogType.setTargetFragment(ClickerButtonFragment.this, REQUEST_TYPE);
                 dialogType.show(managerType, DIALOG_TYPE);
-
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -231,13 +248,22 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             }
         } else if (requestCode == REQUEST_BATCH) {
             int batchValue = data.getIntExtra(NumberPadFragment.EXTRA_BATCH_VALUE, 0);
+            if (batchValue != 0) {
+                click(batchValue);
+                updateClicker();
+                updateButtonFragment();
+            }
         }
     }
 
     private void updateButtonFragment() {
+
+        int newCount = ClickBox.get(getActivity()).getClickCount(getClicker());
+
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
-        mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
-        if (getClicker().getGoal() == getClicker().getCount()) {
+        //mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
+        mCountView.setText(getString(R.string.count_text, newCount));
+        if (getClicker().getGoal() == newCount) {
             Toast.makeText(getActivity(), R.string.toast_goal, Toast.LENGTH_SHORT).show();
         }
     }

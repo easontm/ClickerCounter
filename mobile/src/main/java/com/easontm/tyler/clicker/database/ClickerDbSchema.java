@@ -25,7 +25,7 @@ public class ClickerDbSchema {
             public static final String PARENT_ID = "parent_id";
             public static final String TIMESTAMP = "timestamp";
             public static final String LOCATION = "location";
-
+            public static final String VALUE = "value";
         }
     }
 

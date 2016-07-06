@@ -8,14 +8,16 @@ import java.util.UUID;
  */
 public class Click {
     private UUID mId;
-    private int mParentId;
+    private UUID mParentId;
     //private Date timestamp;
     private String timestamp;
     private String location;
-    private int value;
+    private int mValue;
 
-    public Click() {
+    public Click(UUID parentId, int value) {
         this(UUID.randomUUID());
+        mValue = value;
+        mParentId = parentId;
     }
 
     public Click(UUID id) {
@@ -26,11 +28,11 @@ public class Click {
         return mId;
     }
 
-    public int getParentId() {
+    public UUID getParentId() {
         return mParentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(UUID parentId) {
         mParentId = parentId;
     }
 
@@ -61,10 +63,10 @@ public class Click {
     }
 
     public int getValue() {
-        return value;
+        return mValue;
     }
 
     public void setValue(int value) {
-        this.value = value;
+        this.mValue = value;
     }
 }

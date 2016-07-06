@@ -34,6 +34,7 @@ public class ClickerBaseHelper extends SQLiteOpenHelper{
                 ClickTable.Cols.PARENT_ID + ", " +
                 ClickTable.Cols.TIMESTAMP + ", " +
                 ClickTable.Cols.LOCATION + ", " +
+                ClickTable.Cols.VALUE + ", " +
                 " FOREIGN KEY (" + ClickTable.Cols.PARENT_ID + ") REFERENCES " +
                 ClickerTable.NAME + "(_id));"
         );

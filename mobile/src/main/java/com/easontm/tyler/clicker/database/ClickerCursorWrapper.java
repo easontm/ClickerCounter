@@ -42,12 +42,14 @@ public class ClickerCursorWrapper extends CursorWrapper {
         String parent_id = getString(getColumnIndex(ClickTable.Cols.PARENT_ID));
         String timestamp = getString(getColumnIndex(ClickTable.Cols.TIMESTAMP));
         String location = getString(getColumnIndex(ClickTable.Cols.LOCATION));
+        String value = getString(getColumnIndex(ClickTable.Cols.VALUE));
 
         Click click = new Click(UUID.fromString(uuidString));
-        click.setParentId(Integer.parseInt(parent_id));
+        click.setParentId(UUID.fromString(parent_id));
         //DateFormat df =
         click.setTimestamp(timestamp);
         click.setLocation(location);
+        click.setValue(Integer.parseInt(value));
 
         return click;
     }

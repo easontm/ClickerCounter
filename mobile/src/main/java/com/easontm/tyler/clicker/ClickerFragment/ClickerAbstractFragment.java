@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.easontm.tyler.clicker.Click;
+import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.Clicker;
 import com.easontm.tyler.clicker.ClickerBox;
 
@@ -50,6 +52,10 @@ public abstract class ClickerAbstractFragment extends Fragment {
 
     protected Clicker getClicker() {
         return mClicker;
+    }
+
+    protected void click(int value) {
+        ClickBox.get(getActivity()).addClick(new Click(mClickerId, value));
     }
 
 }
