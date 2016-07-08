@@ -231,7 +231,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             updateButtonFragment();
         } else if (requestCode == REQUEST_COUNT) {
             int mCount = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
-            mClicker.setCount(mCount);
+            //mClicker.setCount(mCount);
+            click(mCount - ClickBox.get(getActivity()).getClickCount(getClicker()));
             updateClicker();
             updateButtonFragment();
         } else if (requestCode == REQUEST_TYPE) {

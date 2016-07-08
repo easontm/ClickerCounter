@@ -14,9 +14,8 @@
         android:id="@+id/list_item_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_toRightOf="@id/list_item_achieve_image"
-        android:layout_toLeftOf="@+id/list_item_count"
         android:padding="4dp"
         android:scrollHorizontally="false"
         android:ellipsize="none"
@@ -28,22 +27,23 @@
         android:id="@+id/list_item_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_toRightOf="@id/list_item_achieve_image"
+        android:layout_below="@id/list_item_title_text"
         android:text="99"
-        android:padding="6dp" />
+        android:paddingBottom="0dp"
+        android:paddingLeft="4dp"/>
 
     <TextView
         android:id="@+id/list_item_goal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_below="@id/list_item_title_text"
+        android:layout_below="@id/list_item_count"
         android:layout_toRightOf="@id/list_item_achieve_image"
-        android:paddingRight="4dp"
-        android:paddingLeft="8dp"
         android:paddingTop="0dp"
         android:paddingBottom="4dp"
+        android:paddingLeft="4dp"
         android:text="Goal: 0"
         />
 
