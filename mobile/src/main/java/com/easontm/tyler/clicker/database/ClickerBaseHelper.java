@@ -25,7 +25,8 @@ public class ClickerBaseHelper extends SQLiteOpenHelper{
             ClickerTable.Cols.TITLE + ", " +
             ClickerTable.Cols.COUNT + ", " +
             ClickerTable.Cols.GOAL + ", " +
-            ClickerTable.Cols.TYPE + ")"
+            ClickerTable.Cols.TYPE + ", " +
+            ClickerTable.Cols.LOCATION_STATUS + ");"
         );
 
         db.execSQL("create table " + ClickTable.NAME + "(" +
@@ -33,7 +34,8 @@ public class ClickerBaseHelper extends SQLiteOpenHelper{
                 ClickTable.Cols.UUID + ", " +
                 ClickTable.Cols.PARENT_ID + ", " +
                 ClickTable.Cols.TIMESTAMP + ", " +
-                ClickTable.Cols.LOCATION + ", " +
+                ClickTable.Cols.LATITUDE + ", " +
+                ClickTable.Cols.LONGITUDE + ", " +
                 ClickTable.Cols.VALUE + ", " +
                 " FOREIGN KEY (" + ClickTable.Cols.PARENT_ID + ") REFERENCES " +
                 ClickerTable.NAME + "(_id));"

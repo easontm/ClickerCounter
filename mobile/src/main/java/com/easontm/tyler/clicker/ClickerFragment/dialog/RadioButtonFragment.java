@@ -1,4 +1,4 @@
-package com.easontm.tyler.clicker.clickerfragment;
+package com.easontm.tyler.clicker.clickerfragment.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.widget.ListView;
 
 import com.easontm.tyler.clicker.R;
 

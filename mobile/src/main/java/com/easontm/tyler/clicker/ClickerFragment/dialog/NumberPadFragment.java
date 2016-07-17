@@ -1,4 +1,4 @@
-package com.easontm.tyler.clicker.clickerfragment;
+package com.easontm.tyler.clicker.clickerfragment.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;

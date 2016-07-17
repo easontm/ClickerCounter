@@ -15,8 +15,13 @@
     <string name="delete_clicker">Delete Clicker</string>
     <string name="menu_set_count">Set Count</string>
     <string name="menu_change_type">Change Clicker Type</string>
+    <string name="menu_location">Location</string>
     <string name="toast_goal">Goal Achieved!</string>
     <string name="batch_click">Batch Click</string>
     <string name="batch_out_of_bounds">Try and keep it within +/-10k.</string>
+
+    <string name="permission_location_rationale">Click location can\'t be tracked without location permissions!</string>
+    <string name="permission_location_inactive">Location tracking INACTIVE.</string>
+    <string name="permission_location_active">Location tracking ACTIVE.</string>
 
 </resources>

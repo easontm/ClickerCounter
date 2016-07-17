@@ -42,7 +42,8 @@ public class ClickBox {
         values.put(ClickTable.Cols.UUID, click.getId().toString());
         values.put(ClickTable.Cols.PARENT_ID, click.getParentId().toString());
         values.put(ClickTable.Cols.TIMESTAMP, click.getTimestamp());
-        values.put(ClickTable.Cols.LOCATION, click.getLocation());
+        values.put(ClickTable.Cols.LATITUDE, click.getLatitude());
+        values.put(ClickTable.Cols.LONGITUDE, click.getLongitude());
         values.put(ClickTable.Cols.VALUE, click.getValue());
 
         return values;
@@ -65,7 +66,8 @@ public class ClickBox {
     public void addClick(Click c) {
         ContentValues values = getContentValues(c);
         mDatabase.insert(ClickTable.NAME, null, values);
-        Log.i(TAG, "Click inserted: " + c.getValue());
+        Log.i(TAG, "Click inserted: " + c.getValue() + ", Time: " + c.getTimestamp() +
+                ", Latitude: " + c.getLatitude() + ", Longitude: " + c.getLongitude());
     }
 
     public int getClickCount(Clicker c) {

@@ -1,5 +1,7 @@
 package com.easontm.tyler.clicker;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,14 +12,21 @@ public class Click {
     private UUID mId;
     private UUID mParentId;
     //private Date timestamp;
-    private String timestamp;
-    private String location;
+    private String mTimestamp;
+    private Double mLatitude;
+    private Double mLongitude;
     private int mValue;
 
     public Click(UUID parentId, int value) {
         this(UUID.randomUUID());
         mValue = value;
         mParentId = parentId;
+
+        Date now = new Date();
+        SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mTimestamp = iso.format(now);
+
+
     }
 
     public Click(UUID id) {
@@ -47,19 +56,27 @@ public class Click {
     */
 
     public String getTimestamp() {
-        return timestamp;
+        return mTimestamp;
     }
 
     public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+        this.mTimestamp = timestamp;
     }
 
-    public String getLocation() {
-        return location;
+    public Double getLatitude() {
+        return mLatitude;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLatitude(Double latitude) {
+        mLatitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        mLongitude = longitude;
     }
 
     public int getValue() {

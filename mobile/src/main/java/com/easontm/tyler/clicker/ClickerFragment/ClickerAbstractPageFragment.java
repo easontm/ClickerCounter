@@ -10,15 +10,9 @@ import java.util.UUID;
 /**
  * Created by drink on 6/8/2016.
  */
-//public abstract class ClickerAbstractPageFragment extends Fragment {
 public abstract class ClickerAbstractPageFragment extends ClickerAbstractFragment {
     public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
 
-    /*
-    private UUID mClickerId;
-    private Clicker mClicker;
-    private Callbacks mCallbacks;
-    */
 
     //Required for hosting
     public interface Callbacks {

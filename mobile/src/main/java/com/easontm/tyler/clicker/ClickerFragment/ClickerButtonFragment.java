@@ -17,10 +17,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easontm.tyler.clicker.Click;
 import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
+import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPadFragment;
+import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPickerFragment;
+import com.easontm.tyler.clicker.clickerfragment.dialog.RadioButtonFragment;
 
 /**
  * Created by drink on 6/8/2016.

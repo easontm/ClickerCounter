@@ -33,7 +33,7 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
                     getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
         listFragment.updateUI();
-*/
+        */
     }
 
     public static Intent newIntent(Context packageContext, UUID clickerId) {
@@ -42,23 +42,4 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
         return intent;
     }
 
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(getLayoutResId());
-
-
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment == null) {
-            fragment = createFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
-
-    }*/
 }

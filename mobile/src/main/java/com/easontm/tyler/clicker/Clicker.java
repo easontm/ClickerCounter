@@ -12,6 +12,7 @@ public class Clicker {
     private int mCount;
     private int mGoal;
     private int mType;
+    private boolean isLocationOn;
 
     public Clicker() {
         mId = UUID.randomUUID();
@@ -79,5 +80,13 @@ public class Clicker {
 
     public void setType(int type) {
         this.mType = type;
+    }
+
+    public boolean isLocationOn() {
+        return isLocationOn;
+    }
+
+    public void setLocationOn(boolean locationOn) {
+        isLocationOn = locationOn;
     }
 }

@@ -1,9 +1,18 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +30,10 @@ import java.util.UUID;
  */
 public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
+    private static final String TAG = "ClickerPageParentFra";
     private static final String ARG_CLICKER_ID = "clicker_id";
+    private static final int REQUEST_PERMISSIONS_LOCATION = 1;
+    private View mParentView;
 
     /* Moved to ClickerButtonFragment
     private static final String DIALOG_GOAL = "goal";
@@ -87,6 +99,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clicker_parent, container, false);
+        mParentView = view;
 
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.clicker_detail_viewpager);
         mViewPager.setAdapter(new ClickerFragmentPagerAdapter(
@@ -121,30 +134,87 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                             .commit();
                 }
                 return true;
+            case R.id.menu_item_location_toggle:
+
+                if (mClicker.isLocationOn()) {
+                    updateLocationSetting(false);
+                    item.setChecked(false);
+                } else {
+                    int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+                    if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                        item.setChecked(true);
+                        updateLocationSetting(true);
+                    } else {
+                        // Do they need an explanation?
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage(R.string.permission_location_rationale)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                    REQUEST_PERMISSIONS_LOCATION);
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .create()
+                                    .show();
+                        } else {
+                            // ...nope
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_LOCATION);
+                        }
+                    }
+                }
+
+                return true;
+
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /*
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do the thing
+                    /* Location is not changed here because there isn't a clean way (that I found
+                     * to also activate the menu checkbox outside of the onOptionsItemSelected method.
+                     * So the user has to go hit it again to activate it and set the check mark. */
 
-        if(requestCode == REQUEST_GOAL) {
-            int mGoal = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
-            mClicker.setGoal(mGoal);
-            updateClicker();
+                    Log.i(TAG, "onRequestPermissionsResult GRANTED");
+                } else {
+                    Log.i(TAG, "onRequestPermissionsResult DENIED");
+                    // can't do the thing :'(
+
+                    Snackbar locationOff = Snackbar.make(mParentView,
+                            R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
+                    locationOff.show();
+                }
         }
     }
-    */
 
-    /*
-    protected void updateClicker() {
-        ClickerBox.get(getActivity()).updateClicker(mClicker);
-        mCallbacks.onClickerUpdated(mClicker);
+    private void updateLocationSetting(boolean isActive) {
+        if (isActive) {
+            Log.i(TAG, "Location tracking is ON.");
+            mClicker.setLocationOn(true);
+            Snackbar locationOff = Snackbar.make(mParentView,
+                    R.string.permission_location_active, Snackbar.LENGTH_SHORT);
+            locationOff.show();
+        } else {
+            Log.i(TAG, "Location tracking is OFF.");
+            mClicker.setLocationOn(false);
+            Snackbar locationOff = Snackbar.make(mParentView,
+                    R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
+            locationOff.show();
+        }
+        updateClicker();
     }
-    */
+
+
 }

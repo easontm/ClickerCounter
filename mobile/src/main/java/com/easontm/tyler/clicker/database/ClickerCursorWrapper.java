@@ -27,12 +27,14 @@ public class ClickerCursorWrapper extends CursorWrapper {
         String count = getString(getColumnIndex(ClickerTable.Cols.COUNT));
         String goal = getString(getColumnIndex(ClickerTable.Cols.GOAL));
         String type = getString(getColumnIndex(ClickerTable.Cols.TYPE));
+        String location = getString(getColumnIndex(ClickerTable.Cols.TYPE));
 
         Clicker clicker = new Clicker(UUID.fromString(uuidString));
         clicker.setTitle(title);
         clicker.setCount(Integer.parseInt(count));
         clicker.setGoal(Integer.parseInt(goal));
         clicker.setType(Integer.parseInt(type));
+        clicker.setLocationOn(Boolean.parseBoolean(location));
 
         return clicker;
     }
@@ -41,14 +43,15 @@ public class ClickerCursorWrapper extends CursorWrapper {
         String uuidString = getString(getColumnIndex(ClickTable.Cols.UUID));
         String parent_id = getString(getColumnIndex(ClickTable.Cols.PARENT_ID));
         String timestamp = getString(getColumnIndex(ClickTable.Cols.TIMESTAMP));
-        String location = getString(getColumnIndex(ClickTable.Cols.LOCATION));
+        String latitude = getString(getColumnIndex(ClickTable.Cols.LATITUDE));
+        String longitude = getString(getColumnIndex(ClickTable.Cols.LONGITUDE));
         String value = getString(getColumnIndex(ClickTable.Cols.VALUE));
 
         Click click = new Click(UUID.fromString(uuidString));
         click.setParentId(UUID.fromString(parent_id));
-        //DateFormat df =
         click.setTimestamp(timestamp);
-        click.setLocation(location);
+        click.setLatitude(Double.parseDouble(latitude));
+        click.setLongitude(Double.parseDouble(longitude));
         click.setValue(Integer.parseInt(value));
 
         return click;
