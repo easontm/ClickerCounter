@@ -1,11 +1,16 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,18 +22,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easontm.tyler.clicker.Click;
 import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
 import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPadFragment;
 import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPickerFragment;
 import com.easontm.tyler.clicker.clickerfragment.dialog.RadioButtonFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by drink on 6/8/2016.
  */
 public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
+    private static final String TAG = "ClickerButtonFrag";
     private static final String DIALOG_GOAL = "goal";
     private static final String DIALOG_COUNT = "count";
     private static final String DIALOG_TYPE = "type";
@@ -37,6 +51,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private static final int REQUEST_COUNT = 2;
     private static final int REQUEST_TYPE = 3;
     private static final int REQUEST_BATCH = 4;
+    private static final int REQUEST_CONNECTION_ERROR = 9000;
 
     //private UUID mClickerId;
     private EditText mTitle;
@@ -44,24 +59,49 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private TextView mGoal;
     private Button m1Button;
     private Button m2Button;
-
-
-    /*
-    public static ClickerButtonFragment newInstance(UUID clickerId) {
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_CLICKER_ID, clickerId);
-        ClickerButtonFragment fragment = new ClickerButtonFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-    */
-
+    private GoogleApiClient mClient;
+    protected boolean mServicesActive;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
+
+        mClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        //ToDo: replace TBD icon with LIVE icon
+                        mServicesActive = true;
+                    }
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        //ToDo: replace TBD icon with ON BUT DEAD icon
+                        mServicesActive = false;
+                    }
+                })
+                .build();
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mServicesActive = playServiceAvailability();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mClient.connect();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mClient.disconnect();
     }
 
 
@@ -70,7 +110,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                              Bundle savedInstanceState) {
 
         int mType = getClicker().getType();
-
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
         final ClickBox mClickBox = ClickBox.get(getActivity());
 
@@ -82,17 +121,15 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getClicker().incCount();
-                        //new click bits
+                        //getClicker().incCount();
                         click(1);
-
                         updateClicker();
                         updateButtonFragment();
                     }
                 });
 
                 break;
-            case (TYPE_DEC): // *** FIX ME
+            case (TYPE_DEC):
                 view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
 
                 m1Button = (Button) view.findViewById(R.id.button_increment);
@@ -100,10 +137,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getClicker().decCount();
-                        //new click bits
+                        //getClicker().decCount();
                         click(-1);
-
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -117,10 +152,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getClicker().incCount();
-                        //new click bits
+                        //getClicker().incCount();
                         click(1);
-
                         updateClicker();
                         updateButtonFragment();
                     }
@@ -130,21 +163,16 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m2Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getClicker().decCount();
-                        //new click bits
+                        //getClicker().decCount();
                         click(-1);
-
                         updateClicker();
                         updateButtonFragment();
                     }
                 });
-
                 break;
             default:
                 view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
         }
-
-
 
         mTitle = (EditText) view.findViewById(R.id.text_title);
         mTitle.setText(super.getClicker().getTitle());
@@ -186,19 +214,18 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_set_goal:
-                //Create number dialog
                 FragmentManager managerGoal = getChildFragmentManager();
                 NumberPickerFragment dialogGoal = NumberPickerFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
-                        , NumberPickerFragment.PICKER_GOAL);
+                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
+                        .newInstance(mClicker.getGoal(), NumberPickerFragment.PICKER_GOAL);
                 dialogGoal.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
                 dialogGoal.show(managerGoal, DIALOG_GOAL);
                 return true;
             case R.id.menu_item_set_count:
                 FragmentManager managerCount = getChildFragmentManager();
                 NumberPickerFragment dialogCount = NumberPickerFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
-                        , NumberPickerFragment.PICKER_COUNT);
+                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
+                        .newInstance(mClicker.getCount(), NumberPickerFragment.PICKER_COUNT);
                 dialogCount.setTargetFragment(ClickerButtonFragment.this, REQUEST_COUNT);
                 dialogCount.show(managerCount, DIALOG_COUNT);
                 return true;
@@ -211,7 +238,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             case R.id.menu_item_change_button_type:
                 FragmentManager managerType = getChildFragmentManager();
                 RadioButtonFragment dialogType = RadioButtonFragment
-                        .newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getType());
+                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getType());
+                        .newInstance(mClicker.getType());
                 dialogType.setTargetFragment(ClickerButtonFragment.this, REQUEST_TYPE);
                 dialogType.show(managerType, DIALOG_TYPE);
                 return true;
@@ -233,7 +261,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             updateButtonFragment();
         } else if (requestCode == REQUEST_COUNT) {
             int mCount = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
-            //mClicker.setCount(mCount);
             click(mCount - ClickBox.get(getActivity()).getClickCount(getClicker()));
             updateClicker();
             updateButtonFragment();
@@ -271,4 +298,47 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
     }
 
+    protected void click(final int value) {
+        Log.i(TAG, "ClickerId: " + mClicker.getId() + "   Location tracking: " + mClicker.isLocationOn());
+        if (mClicker.isLocationOn()) {
+            LocationRequest request = LocationRequest.create();
+            request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            request.setNumUpdates(1);
+            request.setInterval(0);
+
+            // Redundant check because the compiler is grumpy.
+            int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+            LocationAvailability availability = LocationServices.FusedLocationApi.getLocationAvailability(mClient);
+            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                if (mServicesActive && mClient.isConnected() && availability.isLocationAvailable()) {
+                    LocationServices.FusedLocationApi
+                            .requestLocationUpdates(mClient, request, new LocationListener() {
+                                @Override
+                                public void onLocationChanged(Location location) {
+                                    Log.i(TAG, "Location: " + location);
+                                    ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
+                                }
+                            });
+                } else {
+                    ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
+                    Log.i(TAG, "Location not available. Click: " + value);
+                }
+            }
+        } else {
+            ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
+            Log.i(TAG, "Location not requested. Click: " + value);
+        }
+    }
+
+    public boolean playServiceAvailability() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(getActivity());
+        if (result != ConnectionResult.SUCCESS) {
+            if(googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(getActivity(), result, REQUEST_CONNECTION_ERROR).show();
+            }
+            return false;
+        }
+        return true;
+    }
 }

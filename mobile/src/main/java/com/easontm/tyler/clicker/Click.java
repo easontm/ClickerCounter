@@ -1,5 +1,7 @@
 package com.easontm.tyler.clicker;
 
+import android.location.Location;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +28,19 @@ public class Click {
         SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         mTimestamp = iso.format(now);
 
+    }
+
+    public Click(UUID parentId, int value, Location location) {
+        this(UUID.randomUUID());
+        mValue = value;
+        mParentId = parentId;
+
+        Date now = new Date();
+        SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        mTimestamp = iso.format(now);
+
+        mLatitude = location.getLatitude();
+        mLongitude = location.getLongitude();
 
     }
 
@@ -44,16 +59,6 @@ public class Click {
     public void setParentId(UUID parentId) {
         mParentId = parentId;
     }
-
-    /*
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-    */
 
     public String getTimestamp() {
         return mTimestamp;

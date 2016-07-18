@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.UUID;
 
@@ -31,26 +33,10 @@ import java.util.UUID;
 public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     private static final String TAG = "ClickerPageParentFra";
-    private static final String ARG_CLICKER_ID = "clicker_id";
+    //private static final String ARG_CLICKER_ID = "clicker_id";
     private static final int REQUEST_PERMISSIONS_LOCATION = 1;
     private View mParentView;
 
-    /* Moved to ClickerButtonFragment
-    private static final String DIALOG_GOAL = "goal";
-    private static final int REQUEST_GOAL = 1;
-    */
-
-    //If abstract isn't a child, change to private
-    /*
-    protected UUID mClickerId;
-    protected Clicker mClicker;
-    protected Callbacks mCallbacks;
-
-
-    public interface Callbacks {
-        void onClickerUpdated(Clicker clicker);
-    }
-    */
 
     public static ClickerPageParentFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
@@ -63,34 +49,14 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     }
 
 
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Activity a;
-
-        if(context instanceof Activity) {
-            a = (Activity) context;
-            mCallbacks = (Callbacks) a;
-        }
-
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
-    */
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*
             mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
             mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
-
+        */
         setHasOptionsMenu(true);
     }
 
@@ -103,7 +69,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.clicker_detail_viewpager);
         mViewPager.setAdapter(new ClickerFragmentPagerAdapter(
-                getChildFragmentManager(), getActivity(), mClickerId));
+                getChildFragmentManager(), getActivity(), mClicker.getId()));
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.clicker_tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -116,6 +82,12 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_parent, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_location_toggle);
+        if (mClicker.isLocationOn()) {
+            item.setChecked(true);
+        } else {
+            item.setChecked(false);
+        }
     }
 
     @Override
@@ -170,8 +142,6 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                 }
 
                 return true;
-
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -183,18 +153,15 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
             case REQUEST_PERMISSIONS_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // do the thing
-                    /* Location is not changed here because there isn't a clean way (that I found
+                    /* Location is not changed here because there isn't a clean way (that I found)
                      * to also activate the menu checkbox outside of the onOptionsItemSelected method.
-                     * So the user has to go hit it again to activate it and set the check mark. */
+                     * So the user has to go hit it again to activate it/set the check mark. */
 
                     Log.i(TAG, "onRequestPermissionsResult GRANTED");
                 } else {
                     Log.i(TAG, "onRequestPermissionsResult DENIED");
                     // can't do the thing :'(
-
-                    Snackbar locationOff = Snackbar.make(mParentView,
-                            R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
-                    locationOff.show();
+                    updateLocationSetting(false);
                 }
         }
     }
@@ -203,18 +170,23 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         if (isActive) {
             Log.i(TAG, "Location tracking is ON.");
             mClicker.setLocationOn(true);
-            Snackbar locationOff = Snackbar.make(mParentView,
+            Snackbar locationOn = Snackbar.make(mParentView,
                     R.string.permission_location_active, Snackbar.LENGTH_SHORT);
-            locationOff.show();
+            locationOn.show();
         } else {
             Log.i(TAG, "Location tracking is OFF.");
             mClicker.setLocationOn(false);
+
             Snackbar locationOff = Snackbar.make(mParentView,
                     R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
             locationOff.show();
+
+            //ToDo: Change TBD icon to OFF
         }
         updateClicker();
     }
+
+
 
 
 }

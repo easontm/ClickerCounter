@@ -10,6 +10,9 @@ import com.easontm.tyler.clicker.Clicker;
 import com.easontm.tyler.clicker.ClickerListFragment;
 import com.easontm.tyler.clicker.R;
 import com.easontm.tyler.clicker.SingleFragmentActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.UUID;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class SingleClickerActivity extends SingleFragmentActivity implements ClickerAbstractFragment.Callbacks {
 
     private static final String EXTRA_CLICKER_ID = "com.easontm.tyler.clicker.clicker_id";
+
 
     @Override
     protected Fragment createFragment() {
@@ -41,5 +45,7 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
         intent.putExtra(EXTRA_CLICKER_ID, clickerId);
         return intent;
     }
+
+
 
 }

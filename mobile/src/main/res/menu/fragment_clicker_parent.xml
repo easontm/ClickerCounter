@@ -12,7 +12,6 @@
         android:icon="@drawable/ic_location"
         android:title="@string/menu_location"
         android:checkable="true"
-        android:checked="false"
         app:showAsAction="never"
         android:orderInCategory="10"
         />

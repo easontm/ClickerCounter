@@ -101,7 +101,7 @@ public class ClickerBox {
         values.put(ClickerTable.Cols.COUNT, clicker.getCount());
         values.put(ClickerTable.Cols.GOAL, clicker.getGoal());
         values.put(ClickerTable.Cols.TYPE, clicker.getType());
-        values.put(ClickerTable.Cols.LOCATION_STATUS, clicker.isLocationOn());
+        values.put(ClickerTable.Cols.LOCATION_STATUS, String.valueOf(clicker.isLocationOn()));
 
         return values;
     }
