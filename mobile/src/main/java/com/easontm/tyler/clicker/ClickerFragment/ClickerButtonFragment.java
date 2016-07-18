@@ -287,7 +287,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     }
 
     private void updateButtonFragment() {
-
+        refreshClicker();
         int newCount = ClickBox.get(getActivity()).getClickCount(getClicker());
 
         mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
@@ -299,6 +299,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     }
 
     protected void click(final int value) {
+        refreshClicker();
         Log.i(TAG, "ClickerId: " + mClicker.getId() + "   Location tracking: " + mClicker.isLocationOn());
         if (mClicker.isLocationOn()) {
             LocationRequest request = LocationRequest.create();
