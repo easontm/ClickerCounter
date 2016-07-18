@@ -8,7 +8,8 @@ import com.easontm.tyler.clicker.clickerfragment.ClickerPageParentFragment;
 import com.easontm.tyler.clicker.clickerfragment.SingleClickerActivity;
 
 public class ClickerListActivity extends SingleFragmentActivity
-        implements ClickerListFragment.Callbacks, ClickerAbstractPageFragment.Callbacks, ClickerPageParentFragment.Callbacks {
+        implements ClickerListFragment.Callbacks, ClickerPageParentFragment.Callbacks {
+    //ClickerAbstractPageFragment.Callbacks,
 
     private static final int REQUEST_CODE_CLICKER_ID = 0;
 

@@ -15,9 +15,11 @@ import java.util.UUID;
 public abstract class ClickerAbstractPageFragment extends ClickerAbstractFragment {
 
     //Required for hosting
+    /*
     public interface Callbacks {
         void onClickerUpdated(Clicker clicker);
     }
+    */
 
 
     public static ClickerAbstractPageFragment newInstance(UUID clickerId) {

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.easontm.tyler.clicker.Clicker;
+import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.ClickerListFragment;
 import com.easontm.tyler.clicker.R;
 import com.easontm.tyler.clicker.SingleFragmentActivity;
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class SingleClickerActivity extends SingleFragmentActivity implements ClickerAbstractFragment.Callbacks {
 
     private static final String EXTRA_CLICKER_ID = "com.easontm.tyler.clicker.clicker_id";
-
+    private Clicker mClicker;
 
     @Override
     protected Fragment createFragment() {
@@ -32,6 +33,8 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
 
     @Override
     public void onClickerUpdated(Clicker clicker) {
+
+        mClicker = ClickerBox.get(this).getClicker(clicker.getId());
         /*
         ClickerListFragment listFragment = (ClickerListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_container);

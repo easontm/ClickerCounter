@@ -25,7 +25,7 @@ import java.util.UUID;
  * Created by drink on 6/9/2016.
  */
 public abstract class ClickerAbstractFragment extends Fragment {
-    protected UUID mClickerId;
+    private UUID mClickerId;
     protected Clicker mClicker;
     protected Callbacks mCallbacks;
 
@@ -71,6 +71,11 @@ public abstract class ClickerAbstractFragment extends Fragment {
     protected void updateClicker() {
         ClickerBox.get(getActivity()).updateClicker(mClicker);
         mCallbacks.onClickerUpdated(mClicker);
+        refreshClicker();
+    }
+
+    protected void refreshClicker() {
+        mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
     }
 
     //ToDo: do I need this?
