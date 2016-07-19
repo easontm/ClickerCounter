@@ -3,6 +3,7 @@ package com.easontm.tyler.clicker;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class ClickerListFragment extends Fragment {
     private RecyclerView mClickerRecyclerView;
     private ClickerAdapter mAdapter;
     private Button mAddButton;
+    private FloatingActionButton mFAB;
     private TextView mNoClickers;
     private Callbacks mCallbacks;
 
@@ -44,7 +46,7 @@ public class ClickerListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -92,6 +94,14 @@ public class ClickerListFragment extends Fragment {
         });
         mNoClickers = (TextView) view.findViewById(R.id.no_clickers_text);
 
+        mFAB = (FloatingActionButton) view.findViewById(R.id.add_fab);
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                makeClicker();
+            }
+        });
+
         updateUI();
 
         return view;
@@ -105,6 +115,7 @@ public class ClickerListFragment extends Fragment {
         //store location in list?
     }
 
+    /* Currently disabled, functionality replaced by FAB. */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
@@ -113,6 +124,7 @@ public class ClickerListFragment extends Fragment {
         //MenuItem subtitleItem = menu.findItem(R.id.menu_item_new_clicker);
     }
 
+    /* Currently disabled, functionality replaced by FAB. */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
