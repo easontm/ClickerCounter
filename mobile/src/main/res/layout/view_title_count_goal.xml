@@ -10,7 +10,13 @@
         android:layout_height="wrap_content"
         android:hint="@string/title_hint"
         android:textSize="38sp"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="14dp"
         />
+
+    <View style="@style/Divider"/>
 
     <TextView
         android:id="@+id/text_count"
@@ -19,7 +25,7 @@
         android:text="Count: -1"
         android:textSize="34sp"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="4dp"
         android:layout_below="@id/text_title"/>
 
     <TextView

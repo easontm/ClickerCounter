@@ -2,21 +2,26 @@ package com.easontm.tyler.clicker.clickerfragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -109,7 +114,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        int mType = getClicker().getType();
+        int mType = mClicker.getType();
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
         final ClickBox mClickBox = ClickBox.get(getActivity());
 
@@ -175,7 +180,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
 
         mTitle = (EditText) view.findViewById(R.id.text_title);
-        mTitle.setText(super.getClicker().getTitle());
+        mTitle.setText(mClicker.getTitle());
+        mTitle.setMaxLines(3);                          // setting these doesn't
+        mTitle.setHorizontallyScrolling(false);         // work via XML for whatever reason
         mTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -184,7 +191,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                getClicker().setTitle(s.toString());
+                mClicker.setTitle(s.toString());
                 updateClicker();
             }
 
@@ -194,12 +201,43 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             }
         });
 
+        mTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTitle.setCursorVisible(true);
+            }
+        });
+
+        mTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    mTitle.setCursorVisible(false);
+                } else {
+                    mTitle.setCursorVisible(true);
+                }
+
+            }
+        });
+        mTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mTitle.setCursorVisible(false);
+                }
+                return false;
+            }
+        });
+
         mCountView = (TextView) view.findViewById(R.id.text_count);
         mCountView.setText(getString(R.string.count_text,
-                ClickBox.get(getActivity()).getClickCount(getClicker())));
+                ClickBox.get(getActivity()).getClickCount(mClicker)));
 
         mGoal = (TextView) view.findViewById(R.id.text_goal);
-        mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
+        mGoal.setText(getString(R.string.goal_text, mClicker.getGoal()));
 
         return view;
     }
@@ -253,6 +291,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
+        refreshClicker();
 
         if(requestCode == REQUEST_GOAL) {
             int mGoal = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
@@ -261,7 +300,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             updateButtonFragment();
         } else if (requestCode == REQUEST_COUNT) {
             int mCount = data.getIntExtra(NumberPickerFragment.EXTRA_GOAL, 0);
-            click(mCount - ClickBox.get(getActivity()).getClickCount(getClicker()));
+            click(mCount - ClickBox.get(getActivity()).getClickCount(mClicker));
             updateClicker();
             updateButtonFragment();
         } else if (requestCode == REQUEST_TYPE) {
@@ -288,12 +327,12 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
 
     private void updateButtonFragment() {
         refreshClicker();
-        int newCount = ClickBox.get(getActivity()).getClickCount(getClicker());
+        int newCount = ClickBox.get(getActivity()).getClickCount(mClicker);
 
-        mGoal.setText(getString(R.string.goal_text, getClicker().getGoal()));
+        mGoal.setText(getString(R.string.goal_text, mClicker.getGoal()));
         //mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
         mCountView.setText(getString(R.string.count_text, newCount));
-        if (getClicker().getGoal() == newCount) {
+        if (mClicker.getGoal() == newCount) {
             Toast.makeText(getActivity(), R.string.toast_goal, Toast.LENGTH_SHORT).show();
         }
     }
