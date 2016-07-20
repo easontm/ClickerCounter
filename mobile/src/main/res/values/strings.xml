@@ -23,5 +23,6 @@
     <string name="permission_location_rationale">Click location can\'t be tracked without location permissions!</string>
     <string name="permission_location_inactive">Location tracking INACTIVE.</string>
     <string name="permission_location_active">Location tracking ACTIVE.</string>
+    <string name="snackbar_deleted">Clicker %1$s deleted.</string>
 
 </resources>
