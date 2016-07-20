@@ -21,7 +21,6 @@ public class ClickerListActivity extends SingleFragmentActivity
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_masterdetail;
-        //return R.layout.activity_fragment;
     }
 
     /*
@@ -67,8 +66,10 @@ public class ClickerListActivity extends SingleFragmentActivity
 
     public void onClickerUpdated(Clicker clicker) {
         if (findViewById(R.id.detail_fragment_container) == null) {
+            // Single pane view
 
         } else {
+            // Double pane view
             ClickerListFragment listFragment = (ClickerListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 

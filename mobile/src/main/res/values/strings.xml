@@ -24,5 +24,7 @@
     <string name="permission_location_inactive">Location tracking INACTIVE.</string>
     <string name="permission_location_active">Location tracking ACTIVE.</string>
     <string name="snackbar_deleted">Clicker %1$s deleted.</string>
+    <string name="snackbar_undo">UNDO</string>
+    <string name="snackbar_restored">Clicker restored!</string>
 
 </resources>

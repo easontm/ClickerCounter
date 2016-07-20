@@ -111,6 +111,7 @@ public class ClickerBox {
         mDatabase.insert(ClickerTable.NAME, null, values);
     }
 
+    //ToDo: delete associated clicks
     public void deleteClicker(Clicker c) {
         String uuidString = c.getId().toString();
         mDatabase.delete(ClickerTable.NAME,

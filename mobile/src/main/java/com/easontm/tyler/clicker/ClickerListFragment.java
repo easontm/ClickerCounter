@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -37,10 +38,12 @@ public class ClickerListFragment extends Fragment {
     private FloatingActionButton mFAB;
     private TextView mNoClickers;
     private Callbacks mCallbacks;
+    private View mParentView;
 
 
     public interface Callbacks {
         void onClickerSelected(Clicker clicker);
+        void onClickerUpdated(Clicker clicker);
     }
 
     @Override
@@ -81,6 +84,7 @@ public class ClickerListFragment extends Fragment {
 
         //Assign views
         View view = inflater.inflate(R.layout.fragment_clicker_list, container, false);
+        mParentView = view.findViewById(R.id.fragment_clicker_list);
         mClickerRecyclerView = (RecyclerView) view.findViewById(R.id.clicker_recycler_view);
         mClickerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -161,6 +165,28 @@ public class ClickerListFragment extends Fragment {
         updateSubtitle();
     }
 
+    public void updateUI(List<Clicker> clickers) {
+        if(clickers.size() == 0) {
+            mClickerRecyclerView.setVisibility(View.GONE);
+            mAddButton.setVisibility(View.VISIBLE);
+            mNoClickers.setVisibility(View.VISIBLE);
+        } else {
+            mClickerRecyclerView.setVisibility(View.VISIBLE);
+            mAddButton.setVisibility(View.GONE);
+            mNoClickers.setVisibility(View.GONE);
+        }
+
+        if(mAdapter == null) {
+            mAdapter = new ClickerAdapter(clickers);
+            mClickerRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.setClickers(clickers);
+            mClickerRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
+        }
+        updateSubtitle();
+    }
+
     private void updateSubtitle() {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         int clickerCount = clickerBox.getClickers().size();
@@ -177,6 +203,38 @@ public class ClickerListFragment extends Fragment {
         //Create intent
         mCallbacks.onClickerSelected(clicker);
         //Start activity for result
+    }
+
+    public void deleteClicker(final Clicker c) {
+        ClickerBox clickerBox = ClickerBox.get(getActivity());
+        final List<Clicker> clickers = clickerBox.getClickers();
+        List<Clicker> clickersMinusOne = clickerBox.getClickers();
+        clickersMinusOne.remove(c);
+        updateUI(clickersMinusOne);
+
+        String deletionString = getString(R.string.snackbar_deleted, c.getTitle());
+        Snackbar deleteSnack = Snackbar.make(mParentView,
+                deletionString, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snackbar restoredSnack = Snackbar.make(mParentView,
+                                R.string.snackbar_restored, Snackbar.LENGTH_SHORT);
+                        restoredSnack.show();
+                        updateUI(clickers);
+                    }
+                })
+                .setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        super.onDismissed(snackbar, event);
+                        if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
+                            ClickerBox.get(getActivity()).deleteClicker(c);
+                            mCallbacks.onClickerUpdated(c);
+                        }
+                    }
+                });
+        deleteSnack.show();
     }
 
     private class ClickerHolder extends RecyclerView.ViewHolder
