@@ -1,7 +1,9 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,6 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.easontm.tyler.clicker.ClickerBox;
+import com.easontm.tyler.clicker.ClickerListActivity;
+import com.easontm.tyler.clicker.ClickerListFragment;
 import com.easontm.tyler.clicker.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -33,7 +37,7 @@ import java.util.UUID;
 public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     private static final String TAG = "ClickerPageParentFra";
-    //private static final String ARG_CLICKER_ID = "clicker_id";
+    public static final String EXTRA_CLICKER_ID = "clicker_id";
     private static final int REQUEST_PERMISSIONS_LOCATION = 1;
     private View mParentView;
 
@@ -94,12 +98,20 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_delete_clicker:
-                ClickerBox.get(getActivity()).deleteClicker(mClicker);
-                mCallbacks.onClickerUpdated(mClicker);
+                //ToDo: handle this
+                //ClickerBox.get(getActivity()).deleteClicker(mClicker);
+                //mCallbacks.onClickerUpdated(mClicker);
 
                 if(getActivity().findViewById(R.id.detail_fragment_container) == null) {
+                    Intent data = new Intent();
+                    data.putExtra(EXTRA_CLICKER_ID, mClicker.getId().toString());
+                    getActivity().setResult(Activity.RESULT_OK, data);
                     getActivity().finish();
                 } else {
+                    ClickerListFragment listFragment = (ClickerListFragment)
+                            getFragmentManager().findFragmentById(R.id.fragment_container);
+                    listFragment.deleteClicker(mClicker);
+
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .remove(getActivity().getSupportFragmentManager()
                                     .findFragmentById(R.id.detail_fragment_container))

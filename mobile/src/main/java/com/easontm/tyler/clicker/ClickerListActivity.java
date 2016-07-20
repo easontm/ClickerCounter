@@ -1,5 +1,6 @@
 package com.easontm.tyler.clicker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
@@ -7,11 +8,13 @@ import com.easontm.tyler.clicker.clickerfragment.ClickerAbstractPageFragment;
 import com.easontm.tyler.clicker.clickerfragment.ClickerPageParentFragment;
 import com.easontm.tyler.clicker.clickerfragment.SingleClickerActivity;
 
+import java.util.UUID;
+
 public class ClickerListActivity extends SingleFragmentActivity
         implements ClickerListFragment.Callbacks, ClickerPageParentFragment.Callbacks {
     //ClickerAbstractPageFragment.Callbacks,
 
-    private static final int REQUEST_CODE_CLICKER_ID = 0;
+    public static final int REQUEST_CODE_CLICKER_ID = 0;
 
     @Override
     protected Fragment createFragment() {
@@ -23,7 +26,7 @@ public class ClickerListActivity extends SingleFragmentActivity
         return R.layout.activity_masterdetail;
     }
 
-    /*
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
@@ -33,10 +36,15 @@ public class ClickerListActivity extends SingleFragmentActivity
             if (data == null) {
                 return;
             }
-
+            String uuidString = data.getStringExtra(ClickerPageParentFragment.EXTRA_CLICKER_ID);
+            UUID uuid = UUID.fromString(uuidString);
+            Clicker deadClicker = ClickerBox.get(this).getClicker(uuid);
+            ClickerListFragment listFragment = (ClickerListFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            listFragment.deleteClicker(deadClicker);
         }
     }
-    */
+
 
     @Override
     public void onClickerSelected(Clicker clicker) {
@@ -51,7 +59,7 @@ public class ClickerListActivity extends SingleFragmentActivity
                     .commit();
             */
             Intent intent = SingleClickerActivity.newIntent(this, clicker.getId());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_CLICKER_ID);
 
         } else {
             // get fragment which holds viewpager, add to detail_fragment_container

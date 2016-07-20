@@ -15,12 +15,18 @@
         android:layout_height="match_parent"
         class="android.support.v7.widget.RecyclerView"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
     <TextView
         android:id="@+id/no_clickers_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_clickers_yet"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        />
 
 
     <!-- I would like to phase this out and replace it with a floating '+' widget -->
@@ -29,7 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_clicker"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        />
+    </LinearLayout>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"

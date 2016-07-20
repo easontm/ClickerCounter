@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ public class ClickerListFragment extends Fragment {
 
     private static final int REQUEST_CODE_CLICKER_NO = 0;
 
+    private boolean showFakeDelete = false;
 
     private RecyclerView mClickerRecyclerView;
     private ClickerAdapter mAdapter;
@@ -39,6 +41,7 @@ public class ClickerListFragment extends Fragment {
     private TextView mNoClickers;
     private Callbacks mCallbacks;
     private View mParentView;
+
 
 
     public interface Callbacks {
@@ -55,7 +58,10 @@ public class ClickerListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        if (!showFakeDelete) {
+            updateUI();
+        }
+
     }
 
     @Override
@@ -89,6 +95,7 @@ public class ClickerListFragment extends Fragment {
         mClickerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Set "first item" view visibility logic
+
         mAddButton = (Button) view.findViewById(R.id.first_clicker_button);
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +103,7 @@ public class ClickerListFragment extends Fragment {
                 makeClicker();
             }
         });
+
         mNoClickers = (TextView) view.findViewById(R.id.no_clickers_text);
 
         mFAB = (FloatingActionButton) view.findViewById(R.id.add_fab);
@@ -209,8 +217,16 @@ public class ClickerListFragment extends Fragment {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         final List<Clicker> clickers = clickerBox.getClickers();
         List<Clicker> clickersMinusOne = clickerBox.getClickers();
-        clickersMinusOne.remove(c);
+
+        for(Clicker clicker : clickersMinusOne) {
+            if (clicker.getId().equals(c.getId())) {
+                clickersMinusOne.remove(clicker);
+                break;
+            }
+        }
+
         updateUI(clickersMinusOne);
+        showFakeDelete = true;
 
         String deletionString = getString(R.string.snackbar_deleted, c.getTitle());
         Snackbar deleteSnack = Snackbar.make(mParentView,
@@ -219,7 +235,7 @@ public class ClickerListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Snackbar restoredSnack = Snackbar.make(mParentView,
-                                R.string.snackbar_restored, Snackbar.LENGTH_SHORT);
+                                R.string.snackbar_restored, Snackbar.LENGTH_LONG);
                         restoredSnack.show();
                         updateUI(clickers);
                     }
@@ -231,6 +247,7 @@ public class ClickerListFragment extends Fragment {
                         if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
                             ClickerBox.get(getActivity()).deleteClicker(c);
                             mCallbacks.onClickerUpdated(c);
+                            showFakeDelete = false;
                         }
                     }
                 });
