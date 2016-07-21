@@ -232,6 +232,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 return false;
             }
         });
+        mTitle.requestFocus();
 
         mCountView = (TextView) view.findViewById(R.id.text_count);
         mCountView.setText(getString(R.string.count_text,

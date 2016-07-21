@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class ClickerListFragment extends Fragment {
     private static final int REQUEST_CODE_CLICKER_NO = 0;
 
     private boolean showFakeDelete = false;
+    private boolean restoreClicker = false;
 
     private RecyclerView mClickerRecyclerView;
     private ClickerAdapter mAdapter;
@@ -214,9 +216,8 @@ public class ClickerListFragment extends Fragment {
     }
 
     public void deleteClicker(final Clicker c) {
-        ClickerBox clickerBox = ClickerBox.get(getActivity());
-        final List<Clicker> clickers = clickerBox.getClickers();
-        List<Clicker> clickersMinusOne = clickerBox.getClickers();
+        final List<Clicker> clickers = new ArrayList<Clicker>(mAdapter.getClickers());
+        List<Clicker> clickersMinusOne = new ArrayList<Clicker>(mAdapter.getClickers());
 
         for(Clicker clicker : clickersMinusOne) {
             if (clicker.getId().equals(c.getId())) {
@@ -234,6 +235,7 @@ public class ClickerListFragment extends Fragment {
                 .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        restoreClicker = true;
                         Snackbar restoredSnack = Snackbar.make(mParentView,
                                 R.string.snackbar_restored, Snackbar.LENGTH_LONG);
                         restoredSnack.show();
@@ -244,10 +246,17 @@ public class ClickerListFragment extends Fragment {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
                         super.onDismissed(snackbar, event);
-                        if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE) {
-                            ClickerBox.get(getActivity()).deleteClicker(c);
-                            mCallbacks.onClickerUpdated(c);
+                        if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_SWIPE ||
+                                event == DISMISS_EVENT_CONSECUTIVE) {
+                            /* If restoreClicker was set TRUE prevents execution of the delete if
+                             * UNDO was pressed (it brings up a new Snackbar which triggers
+                             * onDismissed) */
+                            if (!restoreClicker) {
+                                ClickerBox.get(getActivity()).deleteClicker(c);
+                                //mCallbacks.onClickerUpdated(c);
+                            }
                             showFakeDelete = false;
+                            restoreClicker = false;
                         }
                     }
                 });
@@ -326,6 +335,10 @@ public class ClickerListFragment extends Fragment {
 
         public void setClickers(List<Clicker> clickers) {
             mClickers = clickers;
+        }
+
+        public List<Clicker> getClickers() {
+            return mClickers;
         }
     }
 
