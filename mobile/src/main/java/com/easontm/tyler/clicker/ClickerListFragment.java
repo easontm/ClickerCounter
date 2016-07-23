@@ -87,12 +87,19 @@ public class ClickerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //Fetch Clicker list from DB
-        ClickerBox clickerBox = ClickerBox.get(getActivity());
 
         //Assign views
         View view = inflater.inflate(R.layout.fragment_clicker_list, container, false);
-        mParentView = view.findViewById(R.id.fragment_clicker_list);
+
+
+        if (getActivity().findViewById(R.id.detail_fragment_container) == null) {
+            mParentView = view.findViewById(R.id.fragment_clicker_list);
+        } else {
+            mParentView = getActivity().findViewById(R.id.two_pane_parent);
+        }
+
+        //mParentView = view.findViewById(R.id.fragment_clicker_list);
+
         mClickerRecyclerView = (RecyclerView) view.findViewById(R.id.clicker_recycler_view);
         mClickerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
