@@ -208,11 +208,8 @@ public class ClickerListFragment extends Fragment {
 
     private void makeClicker() {
         Clicker clicker = new Clicker();
-        //Store in DB
-        ClickerBox.get(getActivity()).addClicker(clicker);
-        //Create intent
+        //ClickerBox.get(getActivity()).addClicker(clicker);
         mCallbacks.onClickerSelected(clicker);
-        //Start activity for result
     }
 
     public void deleteClicker(final Clicker c) {
@@ -231,13 +228,13 @@ public class ClickerListFragment extends Fragment {
 
         String deletionString = getString(R.string.snackbar_deleted, c.getTitle());
         Snackbar deleteSnack = Snackbar.make(mParentView,
-                deletionString, Snackbar.LENGTH_SHORT)
+                deletionString, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         restoreClicker = true;
                         Snackbar restoredSnack = Snackbar.make(mParentView,
-                                R.string.snackbar_restored, Snackbar.LENGTH_LONG);
+                                R.string.snackbar_restored, Snackbar.LENGTH_SHORT);
                         restoredSnack.show();
                         updateUI(clickers);
                     }
@@ -254,6 +251,7 @@ public class ClickerListFragment extends Fragment {
                             if (!restoreClicker) {
                                 ClickerBox.get(getActivity()).deleteClicker(c);
                                 //mCallbacks.onClickerUpdated(c);
+                                ClickBox.get(getActivity()).deleteClicks(c.getId());
                             }
                             showFakeDelete = false;
                             restoreClicker = false;

@@ -86,4 +86,27 @@ public class ClickBox {
             cursor.close();
         }
     }
+
+    public int getNumOfClicks(Clicker c) {
+        UUID clickerId = c.getId();
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + ClickTable.NAME +
+                " WHERE " + ClickTable.Cols.PARENT_ID + " = ?", new String[] { clickerId.toString()});
+
+        try {
+            if (cursor.getCount() == 0) {
+                return 0;
+            }
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public void deleteClicks(UUID parentId) {
+        String uuidString = parentId.toString();
+        mDatabase.delete(ClickTable.NAME,
+                ClickTable.Cols.PARENT_ID + " = ?",
+                new String[] { uuidString });
+    }
 }

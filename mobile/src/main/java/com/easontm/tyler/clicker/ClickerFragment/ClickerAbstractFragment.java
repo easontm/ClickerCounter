@@ -47,7 +47,7 @@ public abstract class ClickerAbstractFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
-        mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
+        refreshClicker();
 
     }
 
@@ -69,6 +69,10 @@ public abstract class ClickerAbstractFragment extends Fragment {
     }
 
     protected void updateClicker() {
+        ClickerBox cb = ClickerBox.get(getActivity());
+        if (cb.getClicker(mClicker.getId()) == null) {
+            ClickerBox.get(getActivity()).addClicker(mClicker);
+        }
         ClickerBox.get(getActivity()).updateClicker(mClicker);
         mCallbacks.onClickerUpdated(mClicker);
         refreshClicker();
@@ -76,6 +80,9 @@ public abstract class ClickerAbstractFragment extends Fragment {
 
     protected void refreshClicker() {
         mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
+        if (mClicker == null) {
+            mClicker = new Clicker(mClickerId);
+        }
     }
 
     //ToDo: do I need this?

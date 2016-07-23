@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.ClickerListActivity;
 import com.easontm.tyler.clicker.ClickerListFragment;
@@ -64,6 +65,19 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        /*
+        int numClicks = ClickBox.get(getActivity()).getNumOfClicks(mClicker);
+        if (numClicks == 0 && mClicker.getTitle() == null &&
+                mClicker.getGoal() == 0) {
+            ClickerBox.get(getActivity()).deleteClicker(mClicker);
+            mCallbacks.onClickerUpdated(mClicker);
+        }
+        */
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
