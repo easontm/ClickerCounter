@@ -58,10 +58,6 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-            mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
-            mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
-        */
         setHasOptionsMenu(true);
     }
 

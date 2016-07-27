@@ -18,6 +18,7 @@
     <string name="menu_location">Location</string>
     <string name="toast_goal">Goal Achieved!</string>
     <string name="batch_click">Batch Click</string>
+    <string name="batch_click_short">\u00B1n</string>
     <string name="batch_out_of_bounds">Try and keep it within +/-10k.</string>
 
     <string name="permission_location_rationale">Click location can\'t be tracked without location permissions!</string>
