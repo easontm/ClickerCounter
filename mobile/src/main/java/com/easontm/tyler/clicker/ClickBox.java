@@ -11,6 +11,8 @@ import com.easontm.tyler.clicker.database.ClickerCursorWrapper;
 import com.easontm.tyler.clicker.database.ClickerDbSchema;
 import com.easontm.tyler.clicker.database.ClickerDbSchema.ClickTable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -68,6 +70,27 @@ public class ClickBox {
         mDatabase.insert(ClickTable.NAME, null, values);
         Log.i(TAG, "Click inserted: " + c.getValue() + ", Time: " + c.getTimestamp() +
                 ", Latitude: " + c.getLatitude() + ", Longitude: " + c.getLongitude());
+    }
+
+    public List<Click> getClicks(UUID parentId) {
+        List<Click> clicks = new ArrayList<>();
+
+        ClickerCursorWrapper cursor = queryClicks(
+                ClickTable.Cols.PARENT_ID + " = ?",
+                new String[] { parentId.toString() }
+        );
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()) {
+                clicks.add(cursor.getClick());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return clicks;
     }
 
     public int getClickCount(Clicker c) {

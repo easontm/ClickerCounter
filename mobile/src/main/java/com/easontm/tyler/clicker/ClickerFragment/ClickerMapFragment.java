@@ -1,6 +1,7 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,12 @@ public class ClickerMapFragment extends ClickerAbstractPageFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clicker_map, container, false);
+
+        Fragment innerMap = MapInnerFragment.newInstance(mClicker.getId());
+
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.fragment_map_container, innerMap)
+                .commit();
 
         return view;
     }
