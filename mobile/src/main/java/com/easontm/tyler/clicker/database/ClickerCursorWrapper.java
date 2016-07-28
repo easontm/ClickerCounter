@@ -50,8 +50,10 @@ public class ClickerCursorWrapper extends CursorWrapper {
         Click click = new Click(UUID.fromString(uuidString));
         click.setParentId(UUID.fromString(parent_id));
         click.setTimestamp(timestamp);
-        click.setLatitude(Double.parseDouble(latitude));
-        click.setLongitude(Double.parseDouble(longitude));
+        //click.setLatitude(Double.parseDouble(latitude));
+        //click.setLongitude(Double.parseDouble(longitude));
+        click.setLatitude(latitude == null ? null : Double.parseDouble(latitude));
+        click.setLongitude(longitude == null ? null : Double.parseDouble(longitude));
         click.setValue(Integer.parseInt(value));
 
         return click;

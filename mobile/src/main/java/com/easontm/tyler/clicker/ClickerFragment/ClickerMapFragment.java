@@ -39,7 +39,7 @@ public class ClickerMapFragment extends ClickerAbstractPageFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clicker_map, container, false);
 
-        Fragment innerMap = MapInnerFragment.newInstance(mClicker.getId());
+        MapInnerFragment innerMap = MapInnerFragment.newInstance(mClicker.getId());
 
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.fragment_map_container, innerMap)

@@ -329,9 +329,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private void updateButtonFragment() {
         refreshClicker();
         int newCount = ClickBox.get(getActivity()).getClickCount(mClicker);
+        Log.i(TAG, "Count: " + newCount);
 
         mGoal.setText(getString(R.string.goal_text, mClicker.getGoal()));
-        //mCountView.setText(getString(R.string.count_text, getClicker().getCount()));
         mCountView.setText(getString(R.string.count_text, newCount));
         if (mClicker.getGoal() == newCount) {
             Toast.makeText(getActivity(), R.string.toast_goal, Toast.LENGTH_SHORT).show();
@@ -358,16 +358,22 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                                 public void onLocationChanged(Location location) {
                                     Log.i(TAG, "Location: " + location);
                                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
+                                    Log.i(TAG, "Clicker: " + mClicker.getId().toString()
+                                        + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
                                 }
                             });
                 } else {
                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
                     Log.i(TAG, "Location not available. Click: " + value);
+                    Log.i(TAG, "Clicker: " + mClicker.getId().toString()
+                            + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
                 }
             }
         } else {
             ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
             Log.i(TAG, "Location not requested. Click: " + value);
+            Log.i(TAG, "Clicker: " + mClicker.getId().toString()
+                    + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
         }
     }
 

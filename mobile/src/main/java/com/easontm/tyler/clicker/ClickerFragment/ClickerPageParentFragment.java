@@ -189,6 +189,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     }
 
     private void updateLocationSetting(boolean isActive) {
+        refreshClicker();
         if (isActive) {
             Log.i(TAG, "Location tracking is ON.");
             mClicker.setLocationOn(true);
