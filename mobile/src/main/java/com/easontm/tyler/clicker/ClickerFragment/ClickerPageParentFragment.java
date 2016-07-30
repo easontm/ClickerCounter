@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -30,6 +31,7 @@ import com.easontm.tyler.clicker.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -81,9 +83,40 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         View view = inflater.inflate(R.layout.fragment_clicker_parent, container, false);
         mParentView = view;
 
-        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.clicker_detail_viewpager);
+        final ViewPager mViewPager = (ViewPager) view.findViewById(R.id.clicker_detail_viewpager);
         mViewPager.setAdapter(new ClickerFragmentPagerAdapter(
                 getChildFragmentManager(), getActivity(), mClicker.getId()));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        break;
+                    case 1:
+                        ClickerFragmentPagerAdapter adapter = (ClickerFragmentPagerAdapter) mViewPager.getAdapter();
+                        ClickerMapFragment parentFragment = (ClickerMapFragment) adapter.getFragment(position);
+
+                        MapInnerFragment fragment = (MapInnerFragment) parentFragment.getChildFragmentManager()
+                                .findFragmentById(R.id.fragment_map_container);
+                        fragment.updateUI();
+                        break;
+                    default:
+                        break;
+                }
+
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.clicker_tabs);
         tabLayout.setupWithViewPager(mViewPager);

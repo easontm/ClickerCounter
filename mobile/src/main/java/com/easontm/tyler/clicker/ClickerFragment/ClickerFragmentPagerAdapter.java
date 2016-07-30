@@ -4,7 +4,11 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.SparseArrayCompat;
+import android.view.ViewGroup;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -15,11 +19,13 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
     private String tabTitles[] = new String[] { "Count", "Map" };
     private Context mContext;
     private UUID mClickerId;
+    private SparseArrayCompat<Fragment> mPageMap;
 
     public ClickerFragmentPagerAdapter(FragmentManager fm, Context mContext, UUID clickerId) {
         super(fm);
         this.mContext = mContext;
         mClickerId = clickerId;
+        mPageMap = new SparseArrayCompat<>();
     }
 
     @Override
@@ -30,13 +36,27 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if(position == 0) {
-            return ClickerButtonFragment.newInstance(mClickerId);
+            Fragment fragment = ClickerButtonFragment.newInstance(mClickerId);
+            mPageMap.put(position, fragment);
+            return fragment;
         } else if (position == 1) {
-            return ClickerMapFragment.newInstance(mClickerId);
+            Fragment fragment = ClickerMapFragment.newInstance(mClickerId);
+            mPageMap.put(position, fragment);
+            return fragment;
         } else {
             return null;
         }
 
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        mPageMap.remove(position);
+    }
+
+    public Fragment getFragment(int position) {
+        return mPageMap.get(position);
     }
 
     @Override

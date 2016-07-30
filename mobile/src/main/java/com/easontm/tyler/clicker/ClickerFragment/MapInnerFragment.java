@@ -111,7 +111,7 @@ public class MapInnerFragment extends SupportMapFragment {
     }
     */
 
-    private void updateUI() {
+    public void updateUI() {
         if (mMap == null) {
             return;
         }

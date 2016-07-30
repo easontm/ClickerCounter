@@ -16,8 +16,6 @@ import java.util.UUID;
 public class ClickerMapFragment extends ClickerAbstractPageFragment {
     //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
 
-    private UUID mClickerId;
-
     public static ClickerMapFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLICKER_ID, clickerId);
