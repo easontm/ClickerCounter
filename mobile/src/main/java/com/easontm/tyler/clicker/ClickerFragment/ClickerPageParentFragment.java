@@ -6,12 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -23,15 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.easontm.tyler.clicker.ClickBox;
-import com.easontm.tyler.clicker.ClickerBox;
-import com.easontm.tyler.clicker.ClickerListActivity;
 import com.easontm.tyler.clicker.ClickerListFragment;
 import com.easontm.tyler.clicker.R;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -102,7 +93,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                         ClickerFragmentPagerAdapter adapter = (ClickerFragmentPagerAdapter) mViewPager.getAdapter();
                         ClickerMapFragment parentFragment = (ClickerMapFragment) adapter.getFragment(position);
 
-                        MapInnerFragment fragment = (MapInnerFragment) parentFragment.getChildFragmentManager()
+                        ClickerMapInnerFragment fragment = (ClickerMapInnerFragment) parentFragment.getChildFragmentManager()
                                 .findFragmentById(R.id.fragment_map_container);
                         fragment.updateUI();
                         break;
