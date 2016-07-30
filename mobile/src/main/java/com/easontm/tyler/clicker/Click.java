@@ -8,7 +8,13 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by drink on 6/5/2016.
+ * The Click class represents individual counting instances. Every time
+ * the user records a value change (with a button or batch), a Click is
+ * created with a value, timestamp, parent UUID, and lat/long (if enabled).
+ *
+ * The parent UUID is a foreign key referencing the Clicker UUIDs.
+ *
+ * Created by Tyler on 6/5/2016.
  */
 public class Click {
     private UUID mId;

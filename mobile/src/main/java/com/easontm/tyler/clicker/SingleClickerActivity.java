@@ -1,29 +1,25 @@
-package com.easontm.tyler.clicker.clickerfragment;
+package com.easontm.tyler.clicker;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
-import com.easontm.tyler.clicker.Clicker;
-import com.easontm.tyler.clicker.ClickerBox;
-import com.easontm.tyler.clicker.ClickerListFragment;
-import com.easontm.tyler.clicker.R;
-import com.easontm.tyler.clicker.SingleFragmentActivity;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.easontm.tyler.clicker.clickerfragment.ClickerAbstractFragment;
+import com.easontm.tyler.clicker.clickerfragment.ClickerPageParentFragment;
 
 import java.util.UUID;
 
 /**
- * Created by drink on 6/11/2016.
+ * This activity exists so that proper hierarchical navigation is possible on
+ * devices using the single-pane view.
+ *
+ * Created by Tyler on 6/11/2016.
  */
-public class SingleClickerActivity extends SingleFragmentActivity implements ClickerAbstractFragment.Callbacks {
+public class SingleClickerActivity extends SingleFragmentActivity
+        implements ClickerAbstractFragment.Callbacks {
 
     private static final String EXTRA_CLICKER_ID = "com.easontm.tyler.clicker.clicker_id";
-    private Clicker mClicker;
+    //private Clicker mClicker;
 
     @Override
     protected Fragment createFragment() {
@@ -34,7 +30,7 @@ public class SingleClickerActivity extends SingleFragmentActivity implements Cli
     @Override
     public void onClickerUpdated(Clicker clicker) {
 
-        mClicker = ClickerBox.get(this).getClicker(clicker.getId());
+        //mClicker = ClickerBox.get(this).getClicker(clicker.getId());
         /*
         ClickerListFragment listFragment = (ClickerListFragment)
                     getSupportFragmentManager().findFragmentById(R.id.fragment_container);

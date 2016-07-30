@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -26,7 +27,10 @@ import com.easontm.tyler.clicker.R;
 import java.util.UUID;
 
 /**
- * Created by drink on 6/8/2016.
+ * This is the fragment which hosts the tabs, and naturally the fragments
+ * of those tabs.
+ *
+ * Created by Tyler on 6/8/2016.
  */
 public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
@@ -43,9 +47,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         ClickerPageParentFragment fragment = new ClickerPageParentFragment();
         fragment.setArguments(args);
         return fragment;
-
     }
-
 
 
     @Override
@@ -54,20 +56,15 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        /*
-        int numClicks = ClickBox.get(getActivity()).getNumOfClicks(mClicker);
-        if (numClicks == 0 && mClicker.getTitle() == null &&
-                mClicker.getGoal() == 0) {
-            ClickerBox.get(getActivity()).deleteClicker(mClicker);
-            mCallbacks.onClickerUpdated(mClicker);
-        }
-        */
-    }
-
+    /**
+     * Normal onCreateView stuff, except that we also de-focus page 0 to
+     * drop the soft keyboard if it's live and we also refresh the map on
+     * page 1 if we scroll to it.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,8 +97,6 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                     default:
                         break;
                 }
-
-
             }
 
             @Override
@@ -129,14 +124,21 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         }
     }
 
+    /**
+     * User has the option to delete the Clicker from any page. If we are in single-
+     * pane view, then set the activity result to handle deletion. If we are in master-
+     * detail, then just call the pseudo-delete here. Also pops the fragment off.
+     *
+     * This menu also contains location activation/deactivation. Permission logic
+     * contained here.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_delete_clicker:
-                //ToDo: handle this
-                //ClickerBox.get(getActivity()).deleteClicker(mClicker);
-                //mCallbacks.onClickerUpdated(mClicker);
-
                 if(getActivity().findViewById(R.id.detail_fragment_container) == null) {
                     Intent data = new Intent();
                     data.putExtra(EXTRA_CLICKER_ID, mClicker.getId().toString());
@@ -187,15 +189,21 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                         }
                     }
                 }
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * Handles the results of permission request dialog.
+     * @param requestCode - which request we're handling
+     * @param permissions - what we were asking for
+     * @param grantResults - results
+     */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_PERMISSIONS_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -213,6 +221,11 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         }
     }
 
+    /**
+     * Posts Location setting changes to the DB via updateClicker()
+     * and displays a Snackbar to affirm the change has occurred.
+     * @param isActive
+     */
     private void updateLocationSetting(boolean isActive) {
         refreshClicker();
         if (isActive) {

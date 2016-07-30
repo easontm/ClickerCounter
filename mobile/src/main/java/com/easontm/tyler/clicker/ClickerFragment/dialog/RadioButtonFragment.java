@@ -11,7 +11,12 @@ import android.support.v7.app.AlertDialog;
 import com.easontm.tyler.clicker.R;
 
 /**
- * Created by drink on 6/14/2016.
+ * Allows the user to set the type of Clicker they want
+ * to user. They can choose to exclusively increment or
+ * decrement, or both. This only affects the GUI; they
+ * can switch back at any time.
+ *
+ * Created by Tyler on 6/14/2016.
  */
 public class RadioButtonFragment extends DialogFragment {
 
@@ -33,9 +38,9 @@ public class RadioButtonFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mType = getArguments().getInt(ARG_CLICKER_TYPE);
+        mOutType = mType;
 
         CharSequence[] type_options = {"++", "--", "++/--"};
-
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.menu_change_type))

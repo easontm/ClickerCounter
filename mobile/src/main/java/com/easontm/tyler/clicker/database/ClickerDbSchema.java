@@ -1,7 +1,9 @@
 package com.easontm.tyler.clicker.database;
 
 /**
- * Created by drink on 6/5/2016.
+ * Easy reference for DB.
+ *
+ * Created by Tyler on 6/5/2016.
  */
 public class ClickerDbSchema {
 
@@ -11,7 +13,6 @@ public class ClickerDbSchema {
         public static final class Cols {
             public static final String UUID = "uuid";
             public static final String TITLE = "title";
-            public static final String COUNT = "count";
             public static final String GOAL = "goal";
             public static final String TYPE = "type";
             public static final String LOCATION_STATUS = "location_status";

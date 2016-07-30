@@ -16,7 +16,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by drink on 7/2/2016.
+ * ClickBox is a single(ton) location for the rest of the program
+ * to access Click information and interact with the DB, either
+ * posting or querying information.
+ *
+ * Created by Tyler on 7/2/2016.
  */
 public class ClickBox {
 

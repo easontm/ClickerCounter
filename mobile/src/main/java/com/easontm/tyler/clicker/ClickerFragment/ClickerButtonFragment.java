@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -30,7 +28,6 @@ import android.widget.Toast;
 
 import com.easontm.tyler.clicker.Click;
 import com.easontm.tyler.clicker.ClickBox;
-import com.easontm.tyler.clicker.ClickerBox;
 import com.easontm.tyler.clicker.R;
 import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPadFragment;
 import com.easontm.tyler.clicker.clickerfragment.dialog.NumberPickerFragment;
@@ -43,11 +40,16 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.UUID;
+
 /**
- * Created by drink on 6/8/2016.
+ * Main Fragment where user can count things by creating Clicks. Displays
+ * current count and goal. Has variable layout depending on how the user
+ * would like to click (++/--/+-).
+ *
+ * Created by Tyler on 6/8/2016.
  */
-public class ClickerButtonFragment extends ClickerAbstractPageFragment {
-    //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
+public class ClickerButtonFragment extends ClickerAbstractFragment {
     private static final String TAG = "ClickerButtonFrag";
     private static final String DIALOG_GOAL = "goal";
     private static final String DIALOG_COUNT = "count";
@@ -59,7 +61,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private static final int REQUEST_BATCH = 4;
     private static final int REQUEST_CONNECTION_ERROR = 9000;
 
-    //private UUID mClickerId;
     private EditText mTitle;
     private TextView mCountView;
     private TextView mGoal;
@@ -68,10 +69,21 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     private GoogleApiClient mClient;
     protected boolean mServicesActive;
 
+    public static ClickerButtonFragment newInstance(UUID clickerId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CLICKER_ID, clickerId);
+        ClickerButtonFragment fragment = new ClickerButtonFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Instantiates the Location API for Click tracking.
+     * @param savedInstanceState - previous state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
 
         mClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -101,7 +113,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
     public void onStart() {
         super.onStart();
         mClient.connect();
-
     }
 
     @Override
@@ -110,6 +121,15 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         mClient.disconnect();
     }
 
+    /**
+     * Creates a button layout depending on the chosen Clicker type,
+     * which defaults to increment-only. Also included are current
+     * Count, Goal, and Title.
+     * @param inflater - who's doing the popping
+     * @param container - where popping up
+     * @param savedInstanceState - previous state
+     * @return - the inflated and hooked-up view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -125,7 +145,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //getClicker().incCount();
                         click(1);
                         //updateClicker();
                         updateButtonFragment();
@@ -137,7 +156,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
 
                 m1Button = (Button) view.findViewById(R.id.button_increment);
-                m1Button.setText("DOWN");
+                m1Button.setText(R.string.down);
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -227,7 +246,9 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 return false;
             }
         });
-        mTitle.requestFocus();
+        if (mClicker.getTitle() == null) {
+            mTitle.requestFocus();
+        }
 
         mCountView = (TextView) view.findViewById(R.id.text_count);
         mCountView.setText(getString(R.string.count_text,
@@ -245,13 +266,19 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         inflater.inflate(R.menu.fragment_clicker_button, menu);
     }
 
+    /**
+     * The user has the option to set a current Count (ex: they want to count
+     * 99 bottles of beer down), a Goal, the Clicker type (++/--/+-), and to
+     * make batch Clicks (I just took down 10 bottles of beer writing documentation).
+     * @param item - selected Menu item
+     * @return - did it work
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_set_goal:
                 FragmentManager managerGoal = getChildFragmentManager();
                 NumberPickerFragment dialogGoal = NumberPickerFragment
-                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
                         .newInstance(mClicker.getGoal(), NumberPickerFragment.PICKER_GOAL);
                 dialogGoal.setTargetFragment(ClickerButtonFragment.this, REQUEST_GOAL);
                 dialogGoal.show(managerGoal, DIALOG_GOAL);
@@ -259,8 +286,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             case R.id.menu_item_set_count:
                 FragmentManager managerCount = getChildFragmentManager();
                 NumberPickerFragment dialogCount = NumberPickerFragment
-                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getGoal()
-                        .newInstance(mClicker.getCount(), NumberPickerFragment.PICKER_COUNT);
+                        .newInstance(ClickBox.get(getActivity()).getClickCount(mClicker), NumberPickerFragment.PICKER_COUNT);
                 dialogCount.setTargetFragment(ClickerButtonFragment.this, REQUEST_COUNT);
                 dialogCount.show(managerCount, DIALOG_COUNT);
                 return true;
@@ -273,7 +299,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             case R.id.menu_item_change_button_type:
                 FragmentManager managerType = getChildFragmentManager();
                 RadioButtonFragment dialogType = RadioButtonFragment
-                        //.newInstance(ClickerBox.get(getActivity()).getClicker(mClickerId).getType());
                         .newInstance(mClicker.getType());
                 dialogType.setTargetFragment(ClickerButtonFragment.this, REQUEST_TYPE);
                 dialogType.show(managerType, DIALOG_TYPE);
@@ -283,6 +308,13 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
     }
 
+    /**
+     * Sets various aspects of the Clicker based on dialog fragments
+     * called by the menu.
+     * @param requestCode - what we're updating
+     * @param resultCode - was it OK
+     * @param data - contains the new data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
@@ -309,7 +341,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 getFragmentManager()
                         .beginTransaction()
                         .detach(this)
-                        .attach(this)
+                        .attach(this) // doing this pop-on pop-off to redraw the layout
                         .commit();
             }
         } else if (requestCode == REQUEST_BATCH) {
@@ -322,6 +354,10 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
     }
 
+    /**
+     * Gets the most recent version of the Clicker (refreshClicker) and
+     * displays its data on the fragment.
+     */
     private void updateButtonFragment() {
         refreshClicker();
         int newCount = ClickBox.get(getActivity()).getClickCount(mClicker);
@@ -334,14 +370,24 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
     }
 
+    /**
+     * If location tracking is on, attempts to get lat/long to store with the
+     * Click. Stores nulls if it's not available.
+     *
+     *
+     * @param value - how much to Click
+     */
     protected void click(final int value) {
         refreshClicker();
         Log.i(TAG, "ClickerId: " + mClicker.getId() + "   Location tracking: " + mClicker.isLocationOn());
         if (mClicker.isLocationOn()) {
+             //I'll figure out why the requestLocationUpdates method was calling late
+            /*
             LocationRequest request = LocationRequest.create();
             request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             request.setNumUpdates(1);
             request.setInterval(0);
+            */
 
             // Redundant check because the compiler is grumpy.
             int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
@@ -357,10 +403,12 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
                                 }
                             });
-                     */
+                    */
+
                     Location location = LocationServices.FusedLocationApi.getLastLocation(mClient);
                     Log.i(TAG, "Location: " + location);
                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
+
                 } else {
                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
                     Log.i(TAG, "Location not available. Click: " + value);
@@ -372,8 +420,13 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
         }
         Log.i(TAG, "Clicker: " + mClicker.getId().toString()
                 + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
+
     }
 
+    /**
+     * Checks to see if Google Play services are available.
+     * @return - true if available
+     */
     public boolean playServiceAvailability() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(getActivity());

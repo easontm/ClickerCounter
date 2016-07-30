@@ -1,28 +1,23 @@
 package com.easontm.tyler.clicker.clickerfragment;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.easontm.tyler.clicker.Click;
-import com.easontm.tyler.clicker.ClickBox;
 import com.easontm.tyler.clicker.Clicker;
 import com.easontm.tyler.clicker.ClickerBox;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
+
 
 import java.util.UUID;
 
 /**
- * Created by drink on 6/9/2016.
+ * (Almost) all Clicker fragments inherit information this. Contains methods
+ * for managing Callbacks and Clicker management.
+ *
+ * Created by Tyler on 6/9/2016.
  */
 public abstract class ClickerAbstractFragment extends Fragment {
     private UUID mClickerId;
@@ -35,9 +30,9 @@ public abstract class ClickerAbstractFragment extends Fragment {
     protected static final String ARG_CLICKER_ID = "clicker_id";
     private static final String TAG = "ClickerAbstractFrag";
 
-
-
-
+    /**
+     * Required for hosting
+     */
     public interface Callbacks {
         void onClickerUpdated(Clicker clicker);
     }
@@ -68,6 +63,13 @@ public abstract class ClickerAbstractFragment extends Fragment {
         mCallbacks = null;
     }
 
+    /**
+     * We do not users who accidentally create a Clicker to need to
+     * delete it themselves. updateClicker() is only called once the
+     * user makes a change to the clicker (Clicking, title change, etc).
+     * Once they have made a change indicating that they would like to
+     * keep the Clicker, it is committed to the DB.
+     */
     protected void updateClicker() {
         ClickerBox cb = ClickerBox.get(getActivity());
         if (cb.getClicker(mClicker.getId()) == null) {
@@ -78,18 +80,16 @@ public abstract class ClickerAbstractFragment extends Fragment {
         refreshClicker();
     }
 
+    /**
+     * This method ensures that the Clicker stored in mClicker is the
+     * most recent version as stored in the DB. This is necessary because
+     * each class which inherits from this class stores its own mClicker.
+     */
     protected void refreshClicker() {
         mClicker = ClickerBox.get(getActivity()).getClicker(mClickerId);
         if (mClicker == null) {
             mClicker = new Clicker(mClickerId);
         }
     }
-
-    //ToDo: do I need this?
-    protected Clicker getClicker() {
-        return mClicker;
-    }
-
-
 
 }

@@ -10,6 +10,8 @@
         <item quantity="one">%1$s Clicker</item>
         <item quantity="other">%1$s Clickers</item>
     </plurals>
+    <string name="up">UP</string>
+    <string name="down">DOWN</string>
 
     <string name="menu_set_goal">Set Goal</string>
     <string name="delete_clicker">Delete Clicker</string>

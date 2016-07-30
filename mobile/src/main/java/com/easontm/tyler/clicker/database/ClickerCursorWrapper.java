@@ -13,7 +13,9 @@ import java.text.DateFormat;
 import java.util.UUID;
 
 /**
- * Created by drink on 6/5/2016.
+ * Fetches Clickers and Clicks from the DB and returns them as objects.
+ *
+ * Created by Tyler on 6/5/2016.
  */
 public class ClickerCursorWrapper extends CursorWrapper {
 
@@ -24,14 +26,12 @@ public class ClickerCursorWrapper extends CursorWrapper {
     public Clicker getClicker() {
         String uuidString = getString(getColumnIndex(ClickerTable.Cols.UUID));
         String title = getString(getColumnIndex(ClickerTable.Cols.TITLE));
-        String count = getString(getColumnIndex(ClickerTable.Cols.COUNT));
         String goal = getString(getColumnIndex(ClickerTable.Cols.GOAL));
         String type = getString(getColumnIndex(ClickerTable.Cols.TYPE));
         String location = getString(getColumnIndex(ClickerTable.Cols.LOCATION_STATUS));
 
         Clicker clicker = new Clicker(UUID.fromString(uuidString));
         clicker.setTitle(title);
-        clicker.setCount(Integer.parseInt(count));
         clicker.setGoal(Integer.parseInt(goal));
         clicker.setType(Integer.parseInt(type));
         clicker.setLocationOn(Boolean.parseBoolean(location));

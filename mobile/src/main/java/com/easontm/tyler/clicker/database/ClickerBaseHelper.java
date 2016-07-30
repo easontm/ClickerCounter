@@ -7,7 +7,9 @@ import com.easontm.tyler.clicker.database.ClickerDbSchema.ClickerTable;
 import com.easontm.tyler.clicker.database.ClickerDbSchema.ClickTable;
 
 /**
- * Created by drink on 6/5/2016.
+ * Table creation SQL
+ *
+ * Created by Tyler on 6/5/2016.
  */
 public class ClickerBaseHelper extends SQLiteOpenHelper{
     private static final int VERSION = 1;
@@ -23,7 +25,6 @@ public class ClickerBaseHelper extends SQLiteOpenHelper{
             " _id integer primary key autoincrement, " +
             ClickerTable.Cols.UUID + ", " +
             ClickerTable.Cols.TITLE + ", " +
-            ClickerTable.Cols.COUNT + ", " +
             ClickerTable.Cols.GOAL + ", " +
             ClickerTable.Cols.TYPE + ", " +
             ClickerTable.Cols.LOCATION_STATUS + ");"

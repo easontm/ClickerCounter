@@ -14,7 +14,9 @@ import android.widget.NumberPicker;
 import com.easontm.tyler.clicker.R;
 
 /**
- * This is a NumberPicker for use when setting Goal or Count.
+ * This is a NumberPicker for use when setting Goal or Count. The
+ * default NumberPicker implementation does not allow for negative
+ * numbers. Figuring out a way to implement this is on my ToDo.
  * Created by drink on 6/9/2016.
  */
 public class NumberPickerFragment extends DialogFragment {
@@ -46,7 +48,6 @@ public class NumberPickerFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mGoal = getArguments().getInt(ARG_VALUE);
         mGoalOrCount = getArguments().getInt(ARG_GOAL_OR_COUNT);
-
 
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_goal, null);
         mNumberPicker = (NumberPicker) v.findViewById(R.id.dialog_goal_number_picker);

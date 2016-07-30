@@ -15,7 +15,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by drink on 6/5/2016.
+ * ClickerBox is the single(ton) place for the rest of the program to
+ * access Clickers. It is responsible for querying and posting information
+ * to the database.
+ *
+ * Created by Tyler on 6/5/2016.
  */
 public class ClickerBox {
     private static ClickerBox sClickerBox;
@@ -98,7 +102,6 @@ public class ClickerBox {
         ContentValues values = new ContentValues();
         values.put(ClickerTable.Cols.UUID, clicker.getId().toString());
         values.put(ClickerTable.Cols.TITLE, clicker.getTitle());
-        values.put(ClickerTable.Cols.COUNT, clicker.getCount());
         values.put(ClickerTable.Cols.GOAL, clicker.getGoal());
         values.put(ClickerTable.Cols.TYPE, clicker.getType());
         values.put(ClickerTable.Cols.LOCATION_STATUS, String.valueOf(clicker.isLocationOn()));

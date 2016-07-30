@@ -20,13 +20,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
+ * This fragment is either hosted in the Master part of the a master-detail view
+ * or is on its own. From this fragment, users can create and select Clickers
+ *
  * Created by Tyler on 5/11/2016.
  */
 public class ClickerListFragment extends Fragment {
@@ -48,7 +49,7 @@ public class ClickerListFragment extends Fragment {
 
     public interface Callbacks {
         void onClickerSelected(Clicker clicker);
-        void onClickerUpdated(Clicker clicker);
+        //void onClickerUpdated(Clicker clicker);
     }
 
     @Override
@@ -57,6 +58,11 @@ public class ClickerListFragment extends Fragment {
         //setHasOptionsMenu(true);
     }
 
+    /**
+     * showFakeDelete is a boolean for tracking if we've "deleted" a Clicker.
+     * Deleted Clickers are removed from the list but not immediately deleted. The
+     * updateUI() had to be disabled here so as to maintain the pseudo-delete illusion.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -87,10 +93,7 @@ public class ClickerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-        //Assign views
         View view = inflater.inflate(R.layout.fragment_clicker_list, container, false);
-
 
         if (getActivity().findViewById(R.id.detail_fragment_container) == null) {
             mParentView = view.findViewById(R.id.fragment_clicker_list);
@@ -99,12 +102,10 @@ public class ClickerListFragment extends Fragment {
         }
 
         //mParentView = view.findViewById(R.id.fragment_clicker_list);
-
         mClickerRecyclerView = (RecyclerView) view.findViewById(R.id.clicker_recycler_view);
         mClickerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Set "first item" view visibility logic
-
         mAddButton = (Button) view.findViewById(R.id.first_clicker_button);
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +113,6 @@ public class ClickerListFragment extends Fragment {
                 makeClicker();
             }
         });
-
         mNoClickers = (TextView) view.findViewById(R.id.no_clickers_text);
 
         mFAB = (FloatingActionButton) view.findViewById(R.id.add_fab);
@@ -124,16 +124,18 @@ public class ClickerListFragment extends Fragment {
         });
 
         updateUI();
-
         return view;
-
     }
 
+    /**
+     * Not currently in use.
+     * @param savedInstanceState
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        //store location in list?
+        //ToDO; store location in list?
     }
 
     /* Currently disabled, functionality replaced by FAB. */
@@ -141,8 +143,6 @@ public class ClickerListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_list, menu);
-
-        //MenuItem subtitleItem = menu.findItem(R.id.menu_item_new_clicker);
     }
 
     /* Currently disabled, functionality replaced by FAB. */
@@ -157,6 +157,10 @@ public class ClickerListFragment extends Fragment {
         }
     }
 
+    /**
+     * Manages the 0-th Clicker appearance logic. Notifies the adapter of
+     * changes to the list.
+     */
     public void updateUI() {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         List<Clicker> clickers = clickerBox.getClickers();
@@ -182,6 +186,13 @@ public class ClickerListFragment extends Fragment {
         updateSubtitle();
     }
 
+    /**
+     * Similar to the parameter-less version, except this one updates the list to
+     * match a specific given set of Clickers. This is used to for the pseudo-delete
+     * illusion (the fragment displays a list with the 'deleted' fragment specifically
+     * removed).
+     * @param clickers - a specific given set of Clickers.
+     */
     public void updateUI(List<Clicker> clickers) {
         if(clickers.size() == 0) {
             mClickerRecyclerView.setVisibility(View.GONE);
@@ -204,24 +215,45 @@ public class ClickerListFragment extends Fragment {
         updateSubtitle();
     }
 
+    /**
+     * Updates the '# Clickers' subtitle
+     */
     private void updateSubtitle() {
         ClickerBox clickerBox = ClickerBox.get(getActivity());
         int clickerCount = clickerBox.getClickers().size();
         String subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, clickerCount, clickerCount);
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.getSupportActionBar().setSubtitle(subtitle);
+        if (activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setSubtitle(subtitle);
+        }
     }
 
+    /**
+     * Creates (but does NOT commit to DB) a new Clicker and brings
+     * up its display view view Callbacks.
+     */
     private void makeClicker() {
         Clicker clicker = new Clicker();
         //ClickerBox.get(getActivity()).addClicker(clicker);
         mCallbacks.onClickerSelected(clicker);
     }
 
+    /**
+     * When the user deletes a Clicker, it is removed from the list and a Snackbar
+     * appears giving the user the option to UNDO the delete. This method manages
+     * the pseudo-deletion illusion. If the user ignores the snackbar, dismisses it
+     * via swipe, or deletes another Clicker, the delete is committed to the database
+     * and the Clicker and all associated Clicks are deleted.
+     *
+     * Note: the restoreClicker boolean exists because, on Clicker restoration, another
+     * Snackbar appears. This was unintentionally causing deletes to be committed.
+     *
+     * @param c - Clicker to be deleted
+     */
     public void deleteClicker(final Clicker c) {
-        final List<Clicker> clickers = new ArrayList<Clicker>(mAdapter.getClickers());
-        List<Clicker> clickersMinusOne = new ArrayList<Clicker>(mAdapter.getClickers());
+        final List<Clicker> clickers = new ArrayList<>(mAdapter.getClickers());
+        List<Clicker> clickersMinusOne = new ArrayList<>(mAdapter.getClickers());
 
         for(Clicker clicker : clickersMinusOne) {
             if (clicker.getId().equals(c.getId())) {
@@ -257,7 +289,6 @@ public class ClickerListFragment extends Fragment {
                              * onDismissed) */
                             if (!restoreClicker) {
                                 ClickerBox.get(getActivity()).deleteClicker(c);
-                                //mCallbacks.onClickerUpdated(c);
                                 ClickBox.get(getActivity()).deleteClicks(c.getId());
                             }
                             showFakeDelete = false;
@@ -268,6 +299,9 @@ public class ClickerListFragment extends Fragment {
         deleteSnack.show();
     }
 
+    /**
+     * ViewHolder for the Clicker RecyclerView. Nothing remarkable here.
+     */
     private class ClickerHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -291,8 +325,6 @@ public class ClickerListFragment extends Fragment {
 
         public void bindClicker(Clicker clicker) {
             mClicker = clicker;
-            //set textview values from getters
-
 
             mCount.setText(getString(R.string.count_text,
                     ClickBox.get(getActivity()).getClickCount(clicker)));
@@ -305,13 +337,14 @@ public class ClickerListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            //Create intent for opening Clicker
-            //startActivityForResult(intent, RESULT_CODE_CLICKER_NO);
             mCallbacks.onClickerSelected(mClicker);
         }
 
     }
 
+    /**
+     * Adapter for Clicker RecyclerView. Nothing noteworthy.
+     */
     private class ClickerAdapter extends RecyclerView.Adapter<ClickerHolder> {
 
         private List<Clicker> mClickers;

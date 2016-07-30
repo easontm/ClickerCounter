@@ -15,22 +15,29 @@ import android.widget.Toast;
 import com.easontm.tyler.clicker.R;
 
 /**
- * Created by drink on 7/2/2016.
+ * This dialog is utilized when the user wants to make
+ * a batch click.
+ *
+ * Created by Tyler on 7/2/2016.
  */
 public class NumberPadFragment extends DialogFragment {
 
     public static final String EXTRA_BATCH_VALUE = "com.easontm.tyler.clicker.batch_value";
-    //private static final String ARG_BATCH_VALUE = "batch_value";
 
     private EditText mBatchEditText;
 
     public static NumberPadFragment newInstance() {
-        //Bundle args = new Bundle();
-
-        NumberPadFragment fragment = new NumberPadFragment();
-        return fragment;
+        return new NumberPadFragment();
     }
 
+    /**
+     * Dialog with an EditText which is restricted to numeric values. I limit
+     * the user to +/- 10k because I'm trying to keep things within reason
+     * here.
+     *
+     * @param savedInstanceState - previous state
+     * @return - the dialog
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 

@@ -3,20 +3,25 @@ package com.easontm.tyler.clicker;
 import java.util.UUID;
 
 /**
+ * Clickers are the core object of the Clicker app (naturally).
+ * Users create Clickers to track anything they want that can be
+ * quantified with integers. There are 3 types, which indicate
+ * how the user may modify their data. They can either increment,
+ * decrement, or both. Switching between types is for the sole purpose
+ * of cleaning up the UI.
+ *
  * Created by Tyler on 5/11/2016.
  */
 public class Clicker {
 
     private UUID mId;
     private String mTitle;
-    private int mCount;
     private int mGoal;
     private int mType;
     private boolean isLocationOn;
 
     public Clicker() {
         mId = UUID.randomUUID();
-        mCount = 0;
         mGoal = 0;
         mType = 0;
     }
@@ -26,9 +31,8 @@ public class Clicker {
         mType = 0;
     }
 
-    public Clicker(int countIn, int goalIn, String titleIn) {
+    public Clicker(int goalIn, String titleIn) {
         mId = UUID.randomUUID();
-        mCount = countIn;
         mGoal = goalIn;
         mTitle = titleIn;
     }
@@ -49,28 +53,12 @@ public class Clicker {
         this.mTitle = mTitle;
     }
 
-    public int getCount() {
-        return mCount;
-    }
-
-    public void setCount(int mCount) {
-        this.mCount = mCount;
-    }
-
     public int getGoal() {
         return mGoal;
     }
 
     public void setGoal(int mGoal) {
         this.mGoal = mGoal;
-    }
-
-    public void incCount() {
-        mCount++;
-    }
-
-    public void decCount() {
-        mCount--;
     }
 
     /* Type 0: ++ | Type 1: -- | Type 2: +- */

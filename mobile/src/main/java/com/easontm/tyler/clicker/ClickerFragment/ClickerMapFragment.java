@@ -10,10 +10,12 @@ import com.easontm.tyler.clicker.R;
 import java.util.UUID;
 
 /**
- * Created by drink on 6/8/2016.
+ * Hosts the ClickerInnerMapFragment. These had to be separated so that
+ * the InnerMap fragment could inherit from SupportMapFragment, and we
+ * use this 'wrapper' to pass the Clicker info to the map itself.
+ * Created by Tyler on 6/8/2016.
  */
-public class ClickerMapFragment extends ClickerAbstractPageFragment {
-    //public static final String ARG_CLICKER_ID = "ARG_CLICKER_ID";
+public class ClickerMapFragment extends ClickerAbstractFragment {
 
     public static ClickerMapFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
@@ -22,14 +24,6 @@ public class ClickerMapFragment extends ClickerAbstractPageFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mClickerId = (UUID) getArguments().getSerializable(ARG_CLICKER_ID);
-    }
-    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
