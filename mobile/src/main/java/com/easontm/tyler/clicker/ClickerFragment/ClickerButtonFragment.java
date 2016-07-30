@@ -116,7 +116,6 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
 
         int mType = mClicker.getType();
         View view = inflater.inflate(R.layout.fragment_clicker_1button, container, false);
-        final ClickBox mClickBox = ClickBox.get(getActivity());
 
         switch (mType) {
             case (TYPE_INC):
@@ -128,7 +127,7 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                     public void onClick(View v) {
                         //getClicker().incCount();
                         click(1);
-                        updateClicker();
+                        //updateClicker();
                         updateButtonFragment();
                     }
                 });
@@ -142,9 +141,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //getClicker().decCount();
                         click(-1);
-                        updateClicker();
+                        //updateClicker();
                         updateButtonFragment();
                     }
                 });
@@ -157,9 +155,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m1Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //getClicker().incCount();
                         click(1);
-                        updateClicker();
+                        //updateClicker();
                         updateButtonFragment();
                     }
                 });
@@ -168,9 +165,8 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
                 m2Button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //getClicker().decCount();
                         click(-1);
-                        updateClicker();
+                        //updateClicker();
                         updateButtonFragment();
                     }
                 });
@@ -352,29 +348,30 @@ public class ClickerButtonFragment extends ClickerAbstractPageFragment {
             LocationAvailability availability = LocationServices.FusedLocationApi.getLocationAvailability(mClient);
             if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
                 if (mServicesActive && mClient.isConnected() && availability.isLocationAvailable()) {
+                    /*
                     LocationServices.FusedLocationApi
                             .requestLocationUpdates(mClient, request, new LocationListener() {
                                 @Override
                                 public void onLocationChanged(Location location) {
                                     Log.i(TAG, "Location: " + location);
                                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
-                                    Log.i(TAG, "Clicker: " + mClicker.getId().toString()
-                                        + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
                                 }
                             });
+                     */
+                    Location location = LocationServices.FusedLocationApi.getLastLocation(mClient);
+                    Log.i(TAG, "Location: " + location);
+                    ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value, location));
                 } else {
                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
                     Log.i(TAG, "Location not available. Click: " + value);
-                    Log.i(TAG, "Clicker: " + mClicker.getId().toString()
-                            + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
                 }
             }
         } else {
             ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
             Log.i(TAG, "Location not requested. Click: " + value);
-            Log.i(TAG, "Clicker: " + mClicker.getId().toString()
-                    + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
         }
+        Log.i(TAG, "Clicker: " + mClicker.getId().toString()
+                + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
     }
 
     public boolean playServiceAvailability() {

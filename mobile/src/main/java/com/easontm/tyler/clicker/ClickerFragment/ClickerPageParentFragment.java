@@ -98,6 +98,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                     case 0:
                         break;
                     case 1:
+                        mParentView.requestFocus();
                         ClickerFragmentPagerAdapter adapter = (ClickerFragmentPagerAdapter) mViewPager.getAdapter();
                         ClickerMapFragment parentFragment = (ClickerMapFragment) adapter.getFragment(position);
 

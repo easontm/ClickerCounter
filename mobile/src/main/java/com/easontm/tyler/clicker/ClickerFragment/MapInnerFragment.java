@@ -124,13 +124,10 @@ public class MapInnerFragment extends SupportMapFragment {
                 mMap.addMarker(marker);
             }
 
-            mMap.addMarker(new MarkerOptions().position(new LatLng(50, -25)));
-
             LatLng[] corners = getLatLngBounds(mCoordinateList);
             LatLngBounds bounds = new LatLngBounds.Builder()
                     .include(corners[0])
-                    //.include(corners[1])
-                    .include(new LatLng(50, -25))
+                    .include(corners[1])
                     .build();
 
             int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
