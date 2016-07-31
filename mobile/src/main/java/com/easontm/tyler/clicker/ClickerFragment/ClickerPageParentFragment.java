@@ -37,7 +37,6 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
 
     private static final String TAG = "ClickerPageParentFra";
     public static final String EXTRA_CLICKER_ID = "clicker_id";
-    private static final int REQUEST_PERMISSIONS_LOCATION = 1;
     private View mParentView;
 
 
@@ -113,10 +112,12 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     }
 
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_parent, menu);
+        /*
         //MenuItem locationCheck = menu.findItem(R.id.menu_item_location_toggle);
         MenuItem locationIcon = menu.findItem(R.id.menu_item_location_icon);
         if (mClicker.isLocationOn()) {
@@ -128,7 +129,9 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
             locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
                     R.drawable.ic_location_off, null));
         }
+        */
     }
+
 
     /**
      * User has the option to delete the Clicker from any page. If we are in single-
@@ -161,6 +164,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                             .commit();
                 }
                 return true;
+            /*
             //case R.id.menu_item_location_toggle:
             case R.id.menu_item_location_icon:
                 if (mClicker.isLocationOn()) {
@@ -200,6 +204,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                     }
                 }
                 return true;
+            */
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -211,6 +216,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
      * @param permissions - what we were asking for
      * @param grantResults - results
      */
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -220,7 +226,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                     // do the thing
                     /* Location is not changed here because there isn't a clean way (that I found)
                      * to also activate the menu checkbox outside of the onOptionsItemSelected method.
-                     * So the user has to go hit it again to activate it/set the check mark. */
+                     * So the user has to go hit it again to activate it/set the check mark.
 
                     Log.i(TAG, "onRequestPermissionsResult GRANTED");
                 } else {
@@ -230,12 +236,15 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                 }
         }
     }
+    */
+
 
     /**
      * Posts Location setting changes to the DB via updateClicker()
      * and displays a Snackbar to affirm the change has occurred.
      * @param isActive
      */
+    /*
     private void updateLocationSetting(boolean isActive) {
         refreshClicker();
         if (isActive) {
@@ -256,6 +265,7 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
         }
         updateClicker();
     }
+    */
 
 
 

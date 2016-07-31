@@ -31,4 +31,11 @@
         android:orderInCategory="3"
         />
 
+    <item
+        android:id="@+id/menu_item_location_icon"
+        android:icon="@drawable/ic_location_off"
+        android:title="@string/menu_location"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="2"
+        />
 </menu>
