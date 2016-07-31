@@ -60,6 +60,7 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
     private static final int REQUEST_TYPE = 3;
     private static final int REQUEST_BATCH = 4;
     private static final int REQUEST_CONNECTION_ERROR = 9000;
+    private static final int REQUEST_PERMISSIONS_LOCATION = 5;
 
     private EditText mTitle;
     private TextView mCountView;
@@ -97,6 +98,7 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
                     public void onConnectionSuspended(int i) {
                         //ToDo: replace TBD icon with ON BUT DEAD icon
                         mServicesActive = false;
+
                     }
                 })
                 .build();

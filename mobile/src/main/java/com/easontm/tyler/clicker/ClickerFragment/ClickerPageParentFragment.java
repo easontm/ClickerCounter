@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -116,11 +117,16 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_parent, menu);
-        MenuItem item = menu.findItem(R.id.menu_item_location_toggle);
+        //MenuItem locationCheck = menu.findItem(R.id.menu_item_location_toggle);
+        MenuItem locationIcon = menu.findItem(R.id.menu_item_location_icon);
         if (mClicker.isLocationOn()) {
-            item.setChecked(true);
+            //locationCheck.setChecked(true);
+            locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.ic_location, null));
         } else {
-            item.setChecked(false);
+            //locationCheck.setChecked(false);
+            locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.ic_location_off, null));
         }
     }
 
@@ -155,15 +161,19 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                             .commit();
                 }
                 return true;
-            case R.id.menu_item_location_toggle:
-
+            //case R.id.menu_item_location_toggle:
+            case R.id.menu_item_location_icon:
                 if (mClicker.isLocationOn()) {
                     updateLocationSetting(false);
-                    item.setChecked(false);
+                    //item.setChecked(false);
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.ic_location_off, null));
                 } else {
                     int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
                     if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                        item.setChecked(true);
+                        //item.setChecked(true);
+                        item.setIcon(ResourcesCompat.getDrawable(getResources(),
+                                R.drawable.ic_location, null));
                         updateLocationSetting(true);
                     } else {
                         // Do they need an explanation?

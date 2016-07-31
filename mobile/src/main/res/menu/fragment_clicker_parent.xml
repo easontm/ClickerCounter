@@ -8,6 +8,7 @@
         app:showAsAction="withText"
         android:orderInCategory="11"/>
 
+    <!--
     <item
         android:id="@+id/menu_item_location_toggle"
         android:icon="@drawable/ic_location"
@@ -15,5 +16,15 @@
         android:checkable="true"
         app:showAsAction="never"
         android:orderInCategory="10"
+        />
+
+    -->
+
+    <item
+        android:id="@+id/menu_item_location_icon"
+        android:icon="@drawable/ic_location_off"
+        android:title="@string/menu_location"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="2"
         />
 </menu>
