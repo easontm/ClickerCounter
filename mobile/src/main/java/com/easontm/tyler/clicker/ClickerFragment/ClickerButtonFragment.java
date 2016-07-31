@@ -3,12 +3,18 @@ package com.easontm.tyler.clicker.clickerfragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -36,6 +42,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -67,8 +74,11 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
     private TextView mGoal;
     private Button m1Button;
     private Button m2Button;
+    private View mParentView;
     private GoogleApiClient mClient;
-    protected boolean mServicesActive;
+    private boolean mServicesActive;
+    private boolean mLocationAvailable;
+
 
     public static ClickerButtonFragment newInstance(UUID clickerId) {
         Bundle args = new Bundle();
@@ -98,10 +108,10 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
                     public void onConnectionSuspended(int i) {
                         //ToDo: replace TBD icon with ON BUT DEAD icon
                         mServicesActive = false;
-
                     }
                 })
                 .build();
+
         setHasOptionsMenu(true);
     }
 
@@ -259,6 +269,7 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
         mGoal = (TextView) view.findViewById(R.id.text_goal);
         mGoal.setText(getString(R.string.goal_text, mClicker.getGoal()));
 
+        mParentView = view;
         return view;
     }
 
@@ -266,6 +277,27 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_clicker_button, menu);
+
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        LocationAvailability availability = LocationServices.FusedLocationApi.getLocationAvailability(mClient);
+
+        MenuItem locationIcon = menu.findItem(R.id.menu_item_location_icon);
+        if (mClicker.isLocationOn()) {
+            if (availability == null) {
+                locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                        R.drawable.ic_location, null));
+            }
+            else if (availability.isLocationAvailable()) {
+                locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                        R.drawable.ic_location, null));
+            } else {
+                locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                        R.drawable.ic_location_unavailable, null));
+            }
+        } else {
+            locationIcon.setIcon(ResourcesCompat.getDrawable(getResources(),
+                    R.drawable.ic_location_off, null));
+        }
     }
 
     /**
@@ -304,6 +336,44 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
                         .newInstance(mClicker.getType());
                 dialogType.setTargetFragment(ClickerButtonFragment.this, REQUEST_TYPE);
                 dialogType.show(managerType, DIALOG_TYPE);
+                return true;
+            case R.id.menu_item_location_icon:
+                if (mClicker.isLocationOn()) {
+                    updateLocationSetting(false);
+                    //item.setChecked(false);
+                    item.setIcon(ResourcesCompat.getDrawable(getResources(),
+                            R.drawable.ic_location_off, null));
+                } else {
+                    int permissionCheck = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+                    if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+                        //item.setChecked(true);
+                        item.setIcon(ResourcesCompat.getDrawable(getResources(),
+                                R.drawable.ic_location, null));
+                        updateLocationSetting(true);
+                    } else {
+                        // Do they need an explanation?
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                                getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                            new AlertDialog.Builder(getActivity())
+                                    .setMessage(R.string.permission_location_rationale)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                                    REQUEST_PERMISSIONS_LOCATION);
+                                        }
+                                    })
+                                    .setNegativeButton("Cancel", null)
+                                    .create()
+                                    .show();
+                        } else {
+                            // ...nope
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_LOCATION);
+                        }
+                    }
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -414,7 +484,12 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
                 } else {
                     ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
                     Log.i(TAG, "Location not available. Click: " + value);
+
                 }
+            } else {
+                updateLocationSetting(false);
+                ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
+                Log.i(TAG, "Location requested but lack permissions. Click: " + value);
             }
         } else {
             ClickBox.get(getActivity()).addClick(new Click(mClicker.getId(), value));
@@ -422,7 +497,7 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
         }
         Log.i(TAG, "Clicker: " + mClicker.getId().toString()
                 + " Total: " + ClickBox.get(getActivity()).getClickCount(mClicker));
-
+        getActivity().invalidateOptionsMenu();
     }
 
     /**
@@ -439,5 +514,47 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do the thing
+                    /* Location is not changed here because there isn't a clean way (that I found)
+                     * to also activate the menu checkbox outside of the onOptionsItemSelected method.
+                     * So the user has to go hit it again to activate it/set the check mark. */
+
+                    Log.i(TAG, "onRequestPermissionsResult GRANTED");
+                } else {
+                    Log.i(TAG, "onRequestPermissionsResult DENIED");
+                    // can't do the thing :'(
+                    updateLocationSetting(false);
+                }
+        }
+    }
+
+    private void updateLocationSetting(boolean isActive) {
+        refreshClicker();
+        if (isActive) {
+            Log.i(TAG, "Location tracking is ON.");
+            mClicker.setLocationOn(true);
+            Snackbar locationOn = Snackbar.make(mParentView,
+                    R.string.permission_location_active, Snackbar.LENGTH_SHORT);
+            locationOn.show();
+        } else {
+            Log.i(TAG, "Location tracking is OFF.");
+            mClicker.setLocationOn(false);
+
+            Snackbar locationOff = Snackbar.make(mParentView,
+                    R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
+            locationOff.show();
+
+            //ToDo: Change TBD icon to OFF
+        }
+        updateClicker();
+        getActivity().invalidateOptionsMenu();
     }
 }
