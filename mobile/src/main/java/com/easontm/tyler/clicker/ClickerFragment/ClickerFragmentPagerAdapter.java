@@ -20,8 +20,8 @@ import java.util.UUID;
  * Created by Tyler on 6/8/2016.
  */
 public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Count", "Map" };
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "Count", "Map", "History" };
     private Context mContext;
     private UUID mClickerId;
     private SparseArrayCompat<Fragment> mPageMap;
@@ -46,6 +46,28 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
+        Fragment fragment;
+        switch (position) {
+            case (0): {
+                fragment = ClickerButtonFragment.newInstance(mClickerId);
+                break;
+            }
+            case (1): {
+                fragment = ClickerMapFragment.newInstance(mClickerId);
+                break;
+            }
+            case (2): {
+                fragment = ClickHistoryFragment.newInstance(mClickerId);
+                break;
+            }
+            default:
+                fragment = null;
+                break;
+        }
+        mPageMap.put(position, fragment);
+        return fragment;
+
+        /*
         if(position == 0) {
             Fragment fragment = ClickerButtonFragment.newInstance(mClickerId);
             mPageMap.put(position, fragment);
@@ -54,9 +76,16 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
             Fragment fragment = ClickerMapFragment.newInstance(mClickerId);
             mPageMap.put(position, fragment);
             return fragment;
-        } else {
+        }
+        else if (position == 2) {
+            Fragment fragment = ClickHistoryFragment.newInstance(mClickerId);
+            mPageMap.put(position, fragment);
+            return fragment;
+        }
+        else {
             return null;
         }
+        */
 
     }
 

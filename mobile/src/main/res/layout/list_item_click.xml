@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+    android:background="@drawable/hist_border">
+
+    <TextView
+        android:id="@+id/list_hist_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="default hist value"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/list_hist_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="default hist time"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/list_hist_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="default hist location"
+        android:layout_weight="1"/>
+
+</LinearLayout>

@@ -20,23 +20,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_vertical">
-    <TextView
-        android:id="@+id/no_clickers_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_clickers_yet"
-        android:layout_gravity="center"
-        />
+
+        <TextView
+            android:id="@+id/no_clickers_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_clickers_yet"
+            android:layout_gravity="center"
+            />
 
 
     <!-- I would like to phase this out and replace it with a floating '+' widget -->
-    <Button
-        android:id="@+id/first_clicker_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_clicker"
-        android:layout_gravity="center"
-        />
+        <Button
+            android:id="@+id/first_clicker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_clicker"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 
 

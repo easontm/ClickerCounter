@@ -94,6 +94,8 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                                 .findFragmentById(R.id.fragment_map_container);
                         fragment.updateUI();
                         break;
+                    case 2:
+                        break;
                     default:
                         break;
                 }
@@ -261,7 +263,6 @@ public class ClickerPageParentFragment extends ClickerAbstractFragment {
                     R.string.permission_location_inactive, Snackbar.LENGTH_SHORT);
             locationOff.show();
 
-            //ToDo: Change TBD icon to OFF
         }
         updateClicker();
     }
