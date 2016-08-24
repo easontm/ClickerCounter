@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import android.os.Debug;
+
+import hugo.weaving.DebugLog;
+
 /**
  * FragmentPagerAdapter used to power the tabs hosted in
  * ClickerPageParentFragment. Provides a SparseArray for access
@@ -46,6 +50,7 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
+        //Debug.startMethodTracing("getItem");
         Fragment fragment;
         switch (position) {
             case (0): {
@@ -65,27 +70,8 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
                 break;
         }
         mPageMap.put(position, fragment);
+        //Debug.stopMethodTracing();
         return fragment;
-
-        /*
-        if(position == 0) {
-            Fragment fragment = ClickerButtonFragment.newInstance(mClickerId);
-            mPageMap.put(position, fragment);
-            return fragment;
-        } else if (position == 1) {
-            Fragment fragment = ClickerMapFragment.newInstance(mClickerId);
-            mPageMap.put(position, fragment);
-            return fragment;
-        }
-        else if (position == 2) {
-            Fragment fragment = ClickHistoryFragment.newInstance(mClickerId);
-            mPageMap.put(position, fragment);
-            return fragment;
-        }
-        else {
-            return null;
-        }
-        */
 
     }
 

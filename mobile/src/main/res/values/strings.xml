@@ -15,20 +15,26 @@
     <string name="down">DOWN</string>
 
     <string name="menu_set_goal">Set Goal</string>
-    <string name="delete_clicker">Delete Clicker</string>
     <string name="menu_set_count">Set Count</string>
     <string name="menu_change_type">Change Clicker Type</string>
     <string name="menu_location">Location</string>
+    <string name="menu_export_to_file">Export to File</string>
+
+    <string name="delete_clicker">Delete Clicker</string>
     <string name="toast_goal">Goal Achieved!</string>
     <string name="batch_click">Batch Click</string>
     <string name="batch_click_short">\u00B1n</string>
     <string name="batch_out_of_bounds">Try and keep it within +/-10k.</string>
+    <string name="export_destination">Export to:</string>
 
     <string name="permission_location_rationale">Click location can\'t be tracked without location permissions!</string>
     <string name="permission_location_inactive">Location tracking INACTIVE.</string>
     <string name="permission_location_active">Location tracking ACTIVE.</string>
+    <string name="permission_write_rationale">Write permissions are required for export.</string>
+
     <string name="snackbar_deleted">Clicker %1$s deleted.</string>
     <string name="snackbar_undo">UNDO</string>
     <string name="snackbar_restored">Clicker restored!</string>
+    <string name="exporting_db">Exporting database...</string>
 
 </resources>

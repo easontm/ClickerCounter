@@ -27,6 +27,10 @@ import com.easontm.tyler.clicker.R;
 
 import java.util.UUID;
 
+import android.os.Debug;
+
+import hugo.weaving.DebugLog;
+
 /**
  * This is the fragment which hosts the tabs, and naturally the fragments
  * of those tabs.

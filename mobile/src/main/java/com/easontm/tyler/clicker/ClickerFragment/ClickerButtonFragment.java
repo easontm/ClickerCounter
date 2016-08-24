@@ -49,6 +49,8 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.UUID;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Main Fragment where user can count things by creating Clicks. Displays
  * current count and goal. Has variable layout depending on how the user
@@ -113,6 +115,12 @@ public class ClickerButtonFragment extends ClickerAbstractFragment {
                 .build();
 
         setHasOptionsMenu(true);
+    }
+
+    @DebugLog
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
