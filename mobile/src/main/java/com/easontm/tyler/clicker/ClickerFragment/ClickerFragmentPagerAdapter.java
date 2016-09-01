@@ -59,6 +59,7 @@ public class ClickerFragmentPagerAdapter extends FragmentPagerAdapter {
             }
             case (1): {
                 fragment = ClickerMapFragment.newInstance(mClickerId);
+                //fragment = ClickerButtonFragment.newInstance(mClickerId);
                 break;
             }
             case (2): {
